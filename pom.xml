@@ -42,5 +42,6 @@
             <version>3.45.0.0</version>
         </dependency>
     </dependencies>
+    test
 
 </project>
