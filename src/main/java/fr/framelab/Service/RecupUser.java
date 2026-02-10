@@ -1,4 +1,5 @@
 package fr.framelab.Service;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -7,22 +8,25 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class CurrentChallenge {
+public class RecupUser {
 
     private final HttpClient client;
     private final ObjectMapper mapper;
+    private final String apiKey;
 
-    public CurrentChallenge(String apiKey) {
+    public RecupUser(String apiKey) {
         this.client = HttpClient.newHttpClient();
         this.mapper = new ObjectMapper();
+        this.apiKey = apiKey;
     }
 
-    public CurrentChallenge getChallenge() throws Exception {
+    /*public RecupUser getUser() throws Exception {
         try {
             // Construction de la requête
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:3000/api/challenges/current"))
-                    .GET()
+                    .uri(URI.create("http://localhost:3000/api/auth/login"))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody));
                     .build();
             // Envoi et réception
             HttpResponse<String> response = client.send(request,
@@ -30,15 +34,16 @@ public class CurrentChallenge {
             // Vérification du statut
             if (response.statusCode() == 200) {
                 // Parsing du JSON en objet Java
-                return mapper.readValue(response.body(), CurrentChallenge.class);
+                return mapper.readValue(response.body(), RecupUser.class);
             }
             // Si le statut n'est pas 200, on lève une exception
             throw new Exception("Erreur API: " + response.statusCode());
-        }
-        catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             // Toutes les erreurs réseau/parsing sont encapsulées
             throw new Exception("Échec récupération du challenge en cours", e);
         }
-        }
     }
+}*/
 
+
+}

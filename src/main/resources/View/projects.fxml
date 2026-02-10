@@ -9,7 +9,8 @@
 <?import javafx.scene.image.ImageView?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            prefHeight="1920.0" prefWidth="1080.0"
+            fx:controller="fr.framelab.Controller.ProjectsController"
+            minHeight="1920.0" minWidth="1080.0"
             stylesheets="@challenge.css"
             styleClass="root">
 
@@ -47,7 +48,7 @@
             <Label>  </Label>
             <Label> Date End : </Label>
             <Label>  </Label>
-            <Button styleClass="downloadChallenge"> Télécharger le challenge</Button>
+            <Button styleClass="downloadChallenge"> Télécharger le challenge </Button>
         </VBox>
     </center>
 
