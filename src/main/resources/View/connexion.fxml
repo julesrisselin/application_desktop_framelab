@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="600.0" prefWidth="600.0"
+            stylesheets="@connexion.css"
+            styleClass="root">
+
+    <top>
+        <VBox>
+            <HBox styleClass="navbar">
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox styleClass="boxLogo">
+                    <Label styleClass="logo">Framelab</Label>
+                </VBox>
+            </HBox>
+            <VBox alignment="CENTER">
+                <Region prefHeight="30"/>
+                <Label styleClass="title">Se Connecter</Label>
+            </VBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" styleClass="first_scare">
+            <VBox alignment="CENTER" styleClass="second_scare">
+                <TextField promptText="(Entrez votre email)" styleClass="email"/>
+                <TextField promptText="(Entrez votre mot de passe)" styleClass="password"/>
+            </VBox>
+            <Button styleClass="login"> Se Connecter </Button>
+        </VBox>
+
+
+
+    </center>
+
+
+</BorderPane>
