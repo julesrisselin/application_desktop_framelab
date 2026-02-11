@@ -16,11 +16,12 @@
 
     <top>
         <VBox>
-            <HBox styleClass="navbar"><VBox styleClass="boxHome">
-                <Button styleClass="home">Accueil</Button>
-            </VBox>
+            <HBox styleClass="navbar">
+                <VBox styleClass="boxHome">
+                    <Button styleClass="home">Accueil</Button>
+                </VBox>
                 <VBox styleClass="boxLogOut">
-                    <Button styleClass="logout"> Déconnexion </Button>
+                    <Button styleClass="logout">Déconnexion</Button>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
                 <VBox styleClass="boxLogo">
@@ -31,24 +32,26 @@
     </top>
 
     <center>
-        <VBox styleClass="boxImgChallenge">
-            <ImageView> </ImageView>
-        </VBox>
-
         <VBox>
-            <Label styleClass="titleHistory"> Historique </Label>
-        </VBox>
+            <VBox styleClass="boxImgChallenge">
+                <ImageView fx:id="challengeImage"/>
+            </VBox>
 
-        <VBox styleClass="descChallenge">
-            <Label> Title : </Label>
-            <Label> </Label>
-            <Label> Description : </Label>
-            <Label> </Label>
-            <Label> Date start : </Label>
-            <Label>  </Label>
-            <Label> Date End : </Label>
-            <Label>  </Label>
-            <Button styleClass="downloadChallenge"> Télécharger le challenge </Button>
+            <VBox>
+                <Label styleClass="titleHistory">Historique</Label>
+            </VBox>
+
+            <VBox styleClass="descChallenge">
+                <Label>Title :</Label>
+                <Label fx:id="titleChallenge"/>
+                <Label>Description :</Label>
+                <Label fx:id="descriptionChallenge"/>
+                <Label>Date start :</Label>
+                <Label fx:id="dateStartChallenge"/>
+                <Label>Date End :</Label>
+                <Label fx:id="dateEndChallenge"/>
+                <Button fx:id="downloadButton" styleClass="downloadChallenge">Télécharger le challenge</Button>
+            </VBox>
         </VBox>
     </center>
 

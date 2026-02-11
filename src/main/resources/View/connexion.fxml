@@ -36,6 +36,7 @@
                 <TextField fx:id="passwordField" promptText="(Entrez votre mot de passe)" styleClass="password"/>
             </VBox>
             <Button fx:id="loginButton" styleClass="login" onAction="#connexion"> Se Connecter </Button>
+            <Label fx:id="feedbackLogin"/>
         </VBox>
 
 
