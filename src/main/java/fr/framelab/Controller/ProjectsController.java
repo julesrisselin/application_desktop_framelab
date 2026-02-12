@@ -15,53 +15,80 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
+
 public class ProjectsController {
-    @FXML private Button downloadButton;
-    @FXML private ImageView challengeImage;
-    @FXML private Label titleChallenge;
-        @FXML private Label descriptionChallenge;
-        @FXML private Label dateStartChallenge;
-        @FXML private Label dateEndChallenge;
+    @FXML
+    private Button downloadButton;
+    @FXML
+    private ImageView challengeImage;
+    @FXML
+    private Label titleChallenge;
+    @FXML
+    private Label descriptionChallenge;
+    @FXML
+    private Label dateStartChallenge;
+    @FXML
+    private Label dateEndChallenge;
 
-        private final CurrentChallenge currentChallenge = new CurrentChallenge();
+    private final CurrentChallenge currentChallenge = new CurrentChallenge();
 
-        @FXML public void initialize() {
-            try {
-                showChallenge();
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
+    @FXML
+    public void initialize() {
+        try {
+            showChallenge();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @FXML
+    private void showChallenge() throws Exception {
+
+        Task<ChallengeDTO> task = new Task<>() {
+            @Override
+            protected ChallengeDTO call() throws Exception {
+                return currentChallenge.getChallenge();
             }
-        }
+        };
 
-        @FXML private void showChallenge() throws Exception {
+        task.setOnSucceeded(event -> {
+            ChallengeDTO currentChallenge = task.getValue();
+            if (currentChallenge != null) {
+                try {
+                    ChallengeDataDTO currentChallengeData = currentChallenge.getData();
+                    Image img = new Image(currentChallengeData.getPicture(), 200, 200, true, true);
+                    System.out.println(currentChallengeData.getPicture());
+                    challengeImage.setImage(img);
+                    titleChallenge.setText(currentChallengeData.getTitle_theme());
+                    descriptionChallenge.setText(currentChallengeData.getDescription_theme());
+                    dateStartChallenge.setText(currentChallengeData.getDate_start());
+                    dateEndChallenge.setText(currentChallengeData.getDate_end());
 
-            Task<ChallengeDTO> task = new Task<>(){
-                @Override
-                protected ChallengeDTO call() throws Exception {
-                    return currentChallenge.getChallenge();
+                    downloadButton.setOnAction(e -> {
+                        try {
+                            ImageTools.downloadImage(currentChallengeData.getPicture());
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    });
+
+                } catch (Exception e) {
+
                 }
-            };
 
-            task.setOnSucceeded(event -> {
-                ChallengeDTO currentChallenge = task.getValue();
-                if(currentChallenge != null){
-                    try {
-                        ChallengeDataDTO currentChallengeData = currentChallenge.getData();
-                        Image img = new Image(currentChallengeData.getPicture(),200,200,true, true);
-                        challengeImage.setImage(img);
-                        titleChallenge.setText(currentChallengeData.getTitle_theme());
-                        descriptionChallenge.setText(currentChallengeData.getDescription_theme());
-                        dateStartChallenge.setText(currentChallengeData.getDate_start());
-                        dateEndChallenge.setText(currentChallengeData.getDate_end());
+            }
 
-                    } catch (Exception e){
+        });
+        task.setOnFailed(event -> {
+            System.out.println("task failed");
+        });
 
-                    }
-                }
-            });
-
-            new Thread(task).start();
-        }
+        new Thread(task).start();
 
     }
+
+    ;
+
+}
 
