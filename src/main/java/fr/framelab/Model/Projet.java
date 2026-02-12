@@ -17,6 +17,10 @@ public class Projet {
         this.id_challenge = id_challenge;
     }
 
+    public Projet(String name, String picture, String date_start, String date_last_edit, int id_challenge){
+        this(-1,name,picture,date_start,date_last_edit,id_challenge);
+    }
+
     public int getId() {
         return id;
     }
