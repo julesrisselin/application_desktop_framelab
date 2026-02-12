@@ -9,6 +9,82 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="fr.framelab.Controller.EditorController"
-            prefHeight="400.0" prefWidth="600.0">
+            minHeight="1920.0" minWidth="1080.0"
+            stylesheets="@editor.css"
+            styleClass="root">
+
+
+    <top>
+        <VBox>
+            <HBox styleClass="navbar">
+                <VBox styleClass="boxHome">
+                    <Button styleClass="home">Accueil</Button>
+                </VBox>
+                <VBox styleClass="boxLogOut">
+                    <Button styleClass="logout">Déconnexion</Button>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <VBox styleClass="boxLogo">
+                    <Label styleClass="logo">Framelab</Label>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox styleClass="Calque">
+
+
+        <HBox>
+            <Button styleClass="buttonAddCalqueImage">+ Img</Button>
+            <Button styleClass="buttonMonter"> ^ </Button>
+            <Button styleClass="buttonDescendre"> v </Button>
+            <Button styleClass="buttonAddCalqueDessin"> + Dsin </Button>
+        </HBox>
+        </VBox>
+    </left>
+    <center>
+        <VBox styleClass="Image">
+
+        </VBox>
+
+    </center>
+
+    <right>
+        <VBox styleClass="buttonSaveAndSend">
+            <Button styleClass="saveButton">Enregistrer</Button>
+            <Button styleClass="sendButton">Envoyer</Button>
+        </VBox>
+    </right>
+
+    <bottom>
+        <HBox styleClass="Tools">
+            <VBox>
+                <HBox styleClass="Luminosité">
+                    <Label styleClass="TextFilter"> Luminosité : 0</Label>
+                    <Slider> </Slider>
+                </HBox>
+                <HBox styleClass="Saturation">
+                    <Label styleClass="TextFilter"> Saturation : 0</Label>
+                    <Slider> </Slider>
+                </HBox>
+                <HBox styleClass="Filter">
+                    <Button styleClass="buttonBandW">Noir et blanc</Button>
+                    <Button styleClass="buttonNégatif">Négatif</Button>
+                    <Button styleClass="buttonRotation">Rotation</Button>
+                </HBox>
+            </VBox>
+
+            <VBox>
+                <HBox>
+                    <Button styleClass="buttonEffacer">Effacer</Button>
+                    <Button styleClass="buttonTracer">Tracer</Button>
+                </HBox>
+            </VBox>
+        </HBox>
+    </bottom>
+
 
 </BorderPane>
+
+
