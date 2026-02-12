@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -38,7 +35,7 @@
             </VBox>
 
             <VBox>
-                <Label styleClass="titleHistory">Historique</Label>
+                <Label styleClass="titleHistory">Mes Projets</Label>
             </VBox>
 
             <VBox styleClass="descChallenge">
@@ -50,7 +47,7 @@
                 <Label fx:id="dateStartChallenge"/>
                 <Label>Date End :</Label>
                 <Label fx:id="dateEndChallenge"/>
-                <Button fx:id="downloadButton" styleClass="downloadChallenge">Télécharger le challenge</Button>
+                <Button fx:id="downloadButton" styleClass="downloadChallenge">Nouveau Projet</Button>
             </VBox>
         </VBox>
     </center>

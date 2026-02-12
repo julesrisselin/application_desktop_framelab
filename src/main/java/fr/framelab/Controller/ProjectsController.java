@@ -68,6 +68,7 @@ public class ProjectsController {
                     downloadButton.setOnAction(e -> {
                         try {
                             ImageTools.downloadImage(currentChallengeData.getPicture());
+                            Main.navigateTo(Screen.EDITOR);
                         } catch (IOException ex) {
                             throw new RuntimeException(ex);
                         }

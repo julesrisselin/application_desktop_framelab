@@ -33,7 +33,7 @@
         <VBox alignment="CENTER" styleClass="first_scare">
             <VBox alignment="CENTER" styleClass="second_scare">
                 <TextField fx:id="emailField" promptText="(Entrez votre email)" styleClass="email"/>
-                <TextField fx:id="passwordField" promptText="(Entrez votre mot de passe)" styleClass="password"/>
+                <PasswordField fx:id="passwordField" promptText="(Entrez votre mot de passe)" styleClass="password"/>
             </VBox>
             <Button fx:id="loginButton" styleClass="login" onAction="#connexion"> Se Connecter </Button>
             <Label fx:id="feedbackLogin"/>
