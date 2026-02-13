@@ -2,24 +2,21 @@ package fr.framelab.Controller;
 
 import fr.framelab.DTO.ChallengeDTO;
 import fr.framelab.DTO.ChallengeDataDTO;
-import fr.framelab.DTO.TokenDTO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
 import fr.framelab.Service.CurrentChallenge;
-import fr.framelab.Service.RecupUser;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.IOException;
+import java.io.File;
 
 public class ProjectsController {
     @FXML
-    private Button downloadButton;
+    private Button NewProjetButton;
     @FXML
     private ImageView challengeImage;
     @FXML
@@ -57,19 +54,27 @@ public class ProjectsController {
             if (currentChallenge != null) {
                 try {
                     ChallengeDataDTO currentChallengeData = currentChallenge.getData();
-                    Image img = new Image(currentChallengeData.getPicture(), 200, 200, true, true);
-                    System.out.println(currentChallengeData.getPicture());
+                    String path = "challenge/" + "Challenge#" + currentChallengeData.getId() + ".png";
+                    File file = new File(path);
+                    Image img;
+                    if(!file.isFile()){
+                        img = new Image(currentChallengeData.getPicture(), 200, 200, true, true);
+                        ImageTools.saveImg(img,path);
+                    } else {
+                        img = new Image(file.toURI().toString(),200, 200, true, true);
+                    }
                     challengeImage.setImage(img);
                     titleChallenge.setText(currentChallengeData.getTitle_theme());
                     descriptionChallenge.setText(currentChallengeData.getDescription_theme());
                     dateStartChallenge.setText(currentChallengeData.getDate_start());
                     dateEndChallenge.setText(currentChallengeData.getDate_end());
 
-                    downloadButton.setOnAction(e -> {
+                    NewProjetButton.setOnAction(e -> {
                         try {
-                            ImageTools.downloadImage(currentChallengeData.getPicture());
-                            Main.navigateTo(Screen.EDITOR);
-                        } catch (IOException ex) {
+                            EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
+                            controller.setupChallenge(currentChallengeData.getId());
+
+                        } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
                     });
@@ -82,7 +87,6 @@ public class ProjectsController {
 
         });
         task.setOnFailed(event -> {
-            System.out.println("task failed");
         });
 
         new Thread(task).start();

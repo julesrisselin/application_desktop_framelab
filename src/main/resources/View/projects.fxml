@@ -47,7 +47,7 @@
                 <Label fx:id="dateStartChallenge"/>
                 <Label>Date End :</Label>
                 <Label fx:id="dateEndChallenge"/>
-                <Button fx:id="downloadButton" styleClass="downloadChallenge">Nouveau Projet</Button>
+                <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
             </VBox>
         </VBox>
     </center>

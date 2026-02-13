@@ -1,5 +1,6 @@
 package fr.framelab.DAO;
 
+import fr.framelab.DTO.ChallengeDataDTO;
 import fr.framelab.Model.Projet;
 
 import java.sql.*;
@@ -11,35 +12,17 @@ public class ProjetDAO {
 
     public ProjetDAO(Connection connection) {
         this.connection = connection;
-        initializeTable();
-    }
-
-    private void initializeTable() {
-        String sql = """
-                        CREATE TABLE IF NOT EXISTS projets (
-                            id INTEGER PRIMARY KEY,
-                            name TEXT NOT NULL,
-                            picture TEXT NOT NULL,
-                            date_start TEXT NOT NULL,
-                            date_last_edit TEXT NOT NULL,
-                            id_challenge INTEGER
-                        );
-                """;
-
-        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            pstmt.execute();
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to create projects table: " + e.getMessage(), e);
-        }
     }
 
 
     public void createProjet(Projet projet, int projetId) {
         String sql = "INSERT INTO projets (name, picture, date_start, date_last_edit, id_challenge) VALUES (?,?,?,?,?)";
 
+        ChallengeDataDTO currentChallenge = new ChallengeDataDTO();
+
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, projet.getName());
-            pstmt.setString(2, projet.getPicture());
+            pstmt.setString(2, currentChallenge.getPicture());
             pstmt.setString(3, projet.getDate_start());
             pstmt.setString(4, projet.getDate_last_edit());
             pstmt.setInt(5, projet.getId_challenge());

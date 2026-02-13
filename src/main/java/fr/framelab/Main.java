@@ -26,7 +26,7 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void navigateTo(Screen screen) throws IOException {
+    public static Object navigateTo(Screen screen) throws IOException {
         String path = "/View/connexion.fxml";
         String title = "Connexion";
         switch (screen) {
@@ -55,6 +55,13 @@ public class Main extends Application {
         primaryStage.setTitle(title);
         primaryStage.show();
         primaryStage.setFullScreen(true);
+
+    return projet.getController();
+    }
+
+
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public static void main(String[] args) {
