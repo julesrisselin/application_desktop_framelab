@@ -58,10 +58,10 @@ public class ProjectsController {
                     File file = new File(path);
                     Image img;
                     if(!file.isFile()){
-                        img = new Image(currentChallengeData.getPicture(), 200, 200, true, true);
+                        img = new Image(currentChallengeData.getPicture());
                         ImageTools.saveImg(img,path);
                     } else {
-                        img = new Image(file.toURI().toString(),200, 200, true, true);
+                        img = new Image(file.toURI().toString());
                     }
                     challengeImage.setImage(img);
                     titleChallenge.setText(currentChallengeData.getTitle_theme());

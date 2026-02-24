@@ -22,7 +22,18 @@ public class ImageTools {
         int height = (int) img.getHeight();
         WritableImage wimg = new WritableImage(width, height);
         wimg.getPixelWriter().setPixels(0,0,width,height,img.getPixelReader(),0,0);
+        System.out.println(Integer.toString(width) +  Integer.toString(height));
         return wimg;
+    }
+
+    public static WritableImage copyImg(Image img){
+        int h = (int) img.getHeight();
+        int w = (int) img.getWidth();
+        WritableImage dest = new WritableImage(w,h);
+
+        dest.getPixelWriter().setPixels(0,0,w,h,img.getPixelReader(),0,0);
+
+        return dest;
     }
 
 //    public static void downloadImage(String URLImg) throws IOException{

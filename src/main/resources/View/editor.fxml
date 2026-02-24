@@ -73,8 +73,8 @@
                 </HBox>
                 <HBox styleClass="Filter">
                     <Button styleClass="buttonBandW" onAction="#BandWFilter">Noir et blanc</Button>
-                    <Button styleClass="buttonNégatif" onAction="#NégativeFilter">Négatif</Button>
-                    <Button styleClass="buttonRotation">Rotation</Button>
+                    <Button styleClass="buttonNégatif" onAction="#NegativeFilter">Négatif</Button>
+                    <Button styleClass="buttonRotation" onAction="#rotateImage">Rotation</Button>
                 </HBox>
             </VBox>
 

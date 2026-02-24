@@ -16,12 +16,15 @@ public class EditorController {
     private VBox challengeContainer;
     @FXML
     private ImageView challengeImage;
+    private Image image;
+    private int rotation;
     private int challengeId;
     private Canvas canvas;
 
     @FXML
     public void initialize() {
         try {
+            this.rotation = 0;
 
         } catch (Exception e) {
 
@@ -42,7 +45,7 @@ public class EditorController {
             this.challengeId = challengeId;
             String path = "challenge/Challenge#" + this.challengeId + ".png";
             File file = new File(path);
-            Image img = new Image(file.toURI().toString(), 200, 200, true, true);
+            this.image = new Image(file.toURI().toString());
             createCanvas();
         } catch (Exception e) {
 
@@ -51,13 +54,13 @@ public class EditorController {
     }
 
     public void createCanvas() {
-        this.canvas = new Canvas(800, 600);
+        this.canvas = new Canvas(900, 900);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         challengeContainer.getChildren().add(canvas);
 
         String path = "challenge/Challenge#" + this.challengeId + ".png";
         File file = new File(path);
-        Image img = new Image(file.toURI().toString(), 200, 200, true, true);
+        Image img = new Image(file.toURI().toString());
         WritableImage wImg = ImageTools.convertImage(img);
         gc.drawImage(wImg, 0, 0);
     }
@@ -82,7 +85,7 @@ public class EditorController {
         this.drawCanvasImage(dest);
     }
 
-    public void NégativeFilter() {
+    public void NegativeFilter() {
         WritableImage source = this.canvas.snapshot(null, null);
         int h = (int) source.getHeight();
         int w = (int) source.getWidth();
@@ -102,6 +105,24 @@ public class EditorController {
             }
         }
         this.drawCanvasImage(dest);
+    }
+
+    public void rotateImage(){
+        this.rotation = (this.rotation + 90)%360;
+        WritableImage source = ImageTools.copyImg(this.image);
+        int h = (int) canvas.getHeight();
+        int w = (int) canvas.getWidth();
+
+        int centreX = w/2;
+        int centreY = h/2;
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, w, h);
+        gc.translate(centreX, centreY);
+        gc.rotate(this.rotation);
+        gc.translate(-centreX, -centreY);
+        this.drawCanvasImage(source);
+        gc.rotate(-this.rotation);
     }
 
 
