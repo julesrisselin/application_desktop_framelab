@@ -22,7 +22,6 @@ public class ImageTools {
         int height = (int) img.getHeight();
         WritableImage wimg = new WritableImage(width, height);
         wimg.getPixelWriter().setPixels(0,0,width,height,img.getPixelReader(),0,0);
-        System.out.println(Integer.toString(width) +  Integer.toString(height));
         return wimg;
     }
 

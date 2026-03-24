@@ -4,6 +4,7 @@ import fr.framelab.DTO.ChallengeDataDTO;
 import fr.framelab.Model.Projet;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class ProjetDAO {
@@ -15,7 +16,7 @@ public class ProjetDAO {
     }
 
 
-    public void createProjet(Projet projet, int projetId) {
+    public void createProjet(Projet projet) {
         String sql = "INSERT INTO projets (name, picture, date_start, date_last_edit, id_challenge) VALUES (?,?,?,?,?)";
 
         ChallengeDataDTO currentChallenge = new ChallengeDataDTO();
@@ -34,11 +35,11 @@ public class ProjetDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to save slide: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to save project: " + e.getMessage(), e);
         }
     }
 
-    public void updateProjet(Projet projet, int projetId) {
+    public void updateProjet(Projet projet) {
         String sql = "UPDATE projets SET name = ?,picture = ?, date_start = ?, date_last_edit = ?, id_challenge = ?";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
@@ -77,6 +78,31 @@ public class ProjetDAO {
                 ));
             }
             return Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException("Find failed", e);
+        }
+    }
+
+
+    public ArrayList<Projet> readAllProjects() {
+        String sql = "SELECT * FROM Projets";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+
+            ArrayList<Projet> Allprojects = new ArrayList<Projet>();
+
+            while (rs.next()) {
+                Allprojects.add(new Projet(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("picture"),
+                        rs.getString("date_start"),
+                        rs.getString("date_last_edit"),
+                        rs.getInt("id_challenge")
+                ));
+            }
+            return Allprojects;
         } catch (SQLException e) {
             throw new RuntimeException("Find failed", e);
         }

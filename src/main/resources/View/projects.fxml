@@ -34,22 +34,30 @@
                 <ImageView fx:id="challengeImage"/>
             </VBox>
 
-            <VBox>
+            <TableView>
                 <Label styleClass="titleHistory">Mes Projets</Label>
-            </VBox>
 
-            <VBox styleClass="descChallenge">
-                <Label>Title :</Label>
-                <Label fx:id="titleChallenge"/>
-                <Label>Description :</Label>
-                <Label fx:id="descriptionChallenge"/>
-                <Label>Date start :</Label>
-                <Label fx:id="dateStartChallenge"/>
-                <Label>Date End :</Label>
-                <Label fx:id="dateEndChallenge"/>
-                <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
-            </VBox>
+                <TableView fx:id="listProjects"/>
+                <columns>
+                    <TableColumn text="Nom" fx:id="NameProjets"/>
+                    <TableColumn text="Date de dernière modification" fx:id="LastEditProjets"/>
+                    <!--                        <TableColumn text = "Accès" fx:id="btnAccès"/>-->
+                </columns>
+            </TableView>
         </VBox>
+
+        <VBox styleClass="descChallenge">
+            <Label>Title :</Label>
+            <Label fx:id="titleChallenge"/>
+            <Label>Description :</Label>
+            <Label fx:id="descriptionChallenge"/>
+            <Label>Date start :</Label>
+            <Label fx:id="dateStartChallenge"/>
+            <Label>Date End :</Label>
+            <Label fx:id="dateEndChallenge"/>
+            <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
+        </VBox>
+
     </center>
 
 </BorderPane>

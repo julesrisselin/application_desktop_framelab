@@ -14,8 +14,12 @@ public class DatabaseManager {
     }
 
     public static Connection getConnection() throws SQLException {
+        return getConnection("framelab.db");
+    }
+
+    public static Connection getConnection(String name) throws SQLException {
         if (connection == null){
-            connection = DriverManager.getConnection("jdbc:sqlite::framelab.db:");
+            connection = DriverManager.getConnection("jdbc:sqlite::"+ name);
             connection.createStatement().execute("PRAGMA foreign_keys = ON");
             initializeTableProjets();
         }

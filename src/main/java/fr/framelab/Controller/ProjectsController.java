@@ -1,18 +1,28 @@
 package fr.framelab.Controller;
 
+import fr.framelab.DAO.DatabaseManager;
+import fr.framelab.DAO.ProjetDAO;
 import fr.framelab.DTO.ChallengeDTO;
 import fr.framelab.DTO.ChallengeDataDTO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
+import fr.framelab.Model.Projet;
 import fr.framelab.Service.CurrentChallenge;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ProjectsController {
     @FXML
@@ -27,6 +37,17 @@ public class ProjectsController {
     private Label dateStartChallenge;
     @FXML
     private Label dateEndChallenge;
+    @FXML
+    private TableView<Projet> listProjects;
+    @FXML
+    private TableColumn<Projet, String> NameProjets;
+    @FXML
+    private TableColumn<Projet, String> LastEditProjets;
+//    private ObservableList<Projet> Projets;
+
+
+
+    public String nameProject;
 
     private final CurrentChallenge currentChallenge = new CurrentChallenge();
 
@@ -34,6 +55,9 @@ public class ProjectsController {
     public void initialize() {
         try {
             showChallenge();
+//            NameProjets.setCellValueFactory(new PropertyValueFactory<>("name"));
+//            LastEditProjets.setCellValueFactory(new PropertyValueFactory<>("date_last_edit"));
+//            loadProjets();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -55,11 +79,12 @@ public class ProjectsController {
                 try {
                     ChallengeDataDTO currentChallengeData = currentChallenge.getData();
                     String path = "challenge/" + "Challenge#" + currentChallengeData.getId() + ".png";
+                    System.out.println(path);
                     File file = new File(path);
                     Image img;
-                    if(!file.isFile()){
-                        img = new Image(currentChallengeData.getPicture());
-                        ImageTools.saveImg(img,path);
+                    if (!file.isFile()) {
+                        img = new Image(currentChallengeData.getFullpicture());
+                        ImageTools.saveImg(img, path);
                     } else {
                         img = new Image(file.toURI().toString());
                     }
@@ -71,8 +96,24 @@ public class ProjectsController {
 
                     NewProjetButton.setOnAction(e -> {
                         try {
+                            TextInputDialog dialog = new TextInputDialog("Valeur par défaut");
+                            dialog.setTitle("Rotation");
+                            dialog.setHeaderText("Entrer un nom de projet");
+                            dialog.setContentText("Nom :");
+
+                            Optional<String> result = dialog.showAndWait();
+
+
+                            if (result.isPresent()) {
+                                this.nameProject = result.get();
+                            }
+
+                            Projet newProjet = new Projet(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), currentChallengeData.getId());
+                            ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
+                            firstSave.createProjet(newProjet);
                             EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
                             controller.setupChallenge(currentChallengeData.getId());
+
 
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
@@ -80,20 +121,32 @@ public class ProjectsController {
                     });
 
                 } catch (Exception e) {
-
+                    throw new RuntimeException(e);
                 }
 
             }
 
         });
         task.setOnFailed(event -> {
+            System.out.println("FAIL");
         });
+
 
         new Thread(task).start();
 
     }
 
-    ;
+    private void loadProjets() {
+//        try {
+//            ProjetDAO projets = new ProjetDAO(DatabaseManager.getConnection());
+//            List<Projet> data = projets.readAllProjects();
+//            Projets = FXCollections.observableArrayList(data);
+//            listProjects.setItems(Projets);
+//
+//        } catch (SQLException e) {
+//
+//        }
+    }
 
 }
 

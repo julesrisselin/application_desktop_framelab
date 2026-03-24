@@ -41,6 +41,7 @@ public class EditorController {
     }
 
     public void setupChallenge(int challengeId) throws Exception {
+        System.out.println("Là2");
         try {
             this.challengeId = challengeId;
             String path = "challenge/Challenge#" + this.challengeId + ".png";
@@ -118,11 +119,12 @@ public class EditorController {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, w, h);
+        gc.save();
         gc.translate(centreX, centreY);
         gc.rotate(this.rotation);
         gc.translate(-centreX, -centreY);
         this.drawCanvasImage(source);
-        gc.rotate(-this.rotation);
+        gc.restore();
     }
 
 
@@ -130,6 +132,10 @@ public class EditorController {
     public void drawCanvasImage(Image img) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.drawImage(img, 0, 0);
+    }
+
+    public void saveProject(){
+
     }
 
 

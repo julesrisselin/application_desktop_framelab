@@ -1,12 +1,11 @@
 package fr.framelab;
 
+import fr.framelab.DAO.DatabaseManager;
 import fr.framelab.DAO.ProjetDAO;
 import fr.framelab.Model.Projet;
 import org.junit.jupiter.api.*;
-import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,7 +17,7 @@ public class ProjetDAOTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        this.testConnection = DriverManager.getConnection("jdbc:sqlite::memory:");
+        this.testConnection = DatabaseManager.getConnection("memory");
 
         Statement stmt = this.testConnection.createStatement();
         stmt.execute("PRAGMA foreign_keys = ON");
@@ -37,9 +36,7 @@ public class ProjetDAOTest {
     void shouldCreateProjet() {
         Projet projet = new Projet("projet 1", "/test.png", "12/02/25", "13/02/25", 1);
 
-        this.projetDAO.createProjet(projet, projet.getId());
-
-        assertNotEquals(0, projet.getId());
+        this.projetDAO.createProjet(projet);
 
         try (Statement stmt = this.testConnection.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM projets WHERE id = " + projet.getId())) {
@@ -59,7 +56,7 @@ public class ProjetDAOTest {
     void shouldUpdateProjet() {
         Projet projet = new Projet("projet 1", "/test.png", "12/02/25", "13/02/25", 1);
 
-        this.projetDAO.createProjet(projet, projet.getId());
+        this.projetDAO.createProjet(projet);
 
         projet.setName("test 2");
         projet.setPicture("/test2.png");
@@ -67,7 +64,7 @@ public class ProjetDAOTest {
         projet.setDate_last_edit("13/03/25");
         projet.setId_challenge(2);
 
-        this.projetDAO.updateProjet(projet, projet.getId());
+        this.projetDAO.updateProjet(projet);
 
         assertNotEquals(0, projet.getId());
         try (Statement stmt = this.testConnection.createStatement();
@@ -88,10 +85,9 @@ public class ProjetDAOTest {
     void shouldReadProjet(){
         Projet projet = new Projet("projet 1", "/test.png", "12/02/25", "13/02/25", 1);
 
-        this.projetDAO.createProjet(projet, projet.getId());
+        this.projetDAO.createProjet(projet);
         this.projetDAO.readProjet(projet.getId());
 
-        assertNotEquals(0, projet.getId());
         try (Statement stmt = this.testConnection.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM projets WHERE id = " + projet.getId())) {
 
@@ -107,11 +103,37 @@ public class ProjetDAOTest {
     }
 
     @Test
+    void shouldReadAllProjet(){
+        Projet projet = new Projet("projet 1", "/test.png", "12/02/25", "13/02/25", 1);
+        Projet projet2 = new Projet("projet 2", "/test2.png", "14/02/25", "17/02/25", 2);
+
+        this.projetDAO.createProjet(projet);
+        this.projetDAO.readAllProjects();
+
+        try (Statement stmt = this.testConnection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM projets")) {
+
+            assertTrue(rs.next());
+            assertEquals("projet 1", rs.getString("name"));
+            assertEquals("/test.png", rs.getString("picture"));
+            assertEquals("12/02/25", rs.getString("date_start"));
+            assertEquals("13/02/25", rs.getString("date_last_edit"));
+            assertEquals(1, rs.getInt("id_challenge"));
+            assertEquals("projet 2", rs.getString("name"));
+            assertEquals("/test2.png", rs.getString("picture"));
+            assertEquals("14/02/25", rs.getString("date_start"));
+            assertEquals("17/02/25", rs.getString("date_last_edit"));
+            assertEquals(2, rs.getInt("id_challenge"));
+        } catch (SQLException e) {
+            fail("Erreur SQL : " + e.getMessage());
+        }
+    }
+
+    @Test
     void shouldDeleteProjet(){
         Projet projet = new Projet("projet 1", "/test.png", "12/02/25", "13/02/25", 1);
 
-        this.projetDAO.createProjet(projet, projet.getId());
-        assertNotEquals(0, projet.getId());
+        this.projetDAO.createProjet(projet);
 
         this.projetDAO.deleteProjet(projet.getId());
 
