@@ -27,8 +27,6 @@ import java.util.Optional;
 
 public class ProjectsController {
     @FXML
-    private Button loadProject;
-    @FXML
     private Button NewProjetButton;
     @FXML
     private ImageView challengeImage;
@@ -154,6 +152,14 @@ public class ProjectsController {
         Projet selected = listProjects.getSelectionModel().getSelectedItem();
         EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
         controller.setupChallenge(selected.getId_challenge());
+    }
+
+    @FXML
+    private void suppProject() throws Exception {
+        Projet selected = listProjects.getSelectionModel().getSelectedItem();
+        ProjetDAO suppProject = new ProjetDAO(DatabaseManager.getConnection());
+        suppProject.deleteProjet(selected.getId());
+        projets.remove(selected);
     }
 
 }

@@ -42,7 +42,8 @@
                         <TableColumn text="Date de dernière modification" fx:id="LastEditProjets"/>
                     </columns>
                 </TableView>
-                <Button fx:id="loadProject" onAction="#openProject"> Ouvrir </Button>
+                <Button onAction="#openProject"> Ouvrir </Button>
+                <Button onAction="#suppProject"> Supprimer </Button>
             </VBox>
 
             <VBox styleClass="descChallenge">
