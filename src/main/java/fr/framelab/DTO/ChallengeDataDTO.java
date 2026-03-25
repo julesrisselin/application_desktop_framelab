@@ -41,7 +41,7 @@ public class ChallengeDataDTO {
         return picture;
     }
 
-    public String getFullpicture(){
+    public String getFullPicture(){
         return IMG_URL + picture;
     }
 

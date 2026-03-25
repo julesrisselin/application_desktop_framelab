@@ -23,7 +23,7 @@ public class ProjetDAO {
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, projet.getName());
-            pstmt.setString(2, currentChallenge.getPicture());
+            pstmt.setString(2, currentChallenge.getFullPicture());
             pstmt.setString(3, projet.getDate_start());
             pstmt.setString(4, projet.getDate_last_edit());
             pstmt.setInt(5, projet.getId_challenge());

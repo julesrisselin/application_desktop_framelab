@@ -41,7 +41,6 @@ public class EditorController {
     }
 
     public void setupChallenge(int challengeId) throws Exception {
-        System.out.println("Là2");
         try {
             this.challengeId = challengeId;
             String path = "challenge/Challenge#" + this.challengeId + ".png";

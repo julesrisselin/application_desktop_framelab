@@ -43,7 +43,7 @@ public class ProjectsController {
     private TableColumn<Projet, String> NameProjets;
     @FXML
     private TableColumn<Projet, String> LastEditProjets;
-//    private ObservableList<Projet> Projets;
+    private ObservableList<Projet> projets;
 
 
 
@@ -55,9 +55,9 @@ public class ProjectsController {
     public void initialize() {
         try {
             showChallenge();
-//            NameProjets.setCellValueFactory(new PropertyValueFactory<>("name"));
-//            LastEditProjets.setCellValueFactory(new PropertyValueFactory<>("date_last_edit"));
-//            loadProjets();
+            NameProjets.setCellValueFactory(new PropertyValueFactory<>("name"));
+            LastEditProjets.setCellValueFactory(new PropertyValueFactory<>("date_last_edit"));
+            loadProjets();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -79,11 +79,10 @@ public class ProjectsController {
                 try {
                     ChallengeDataDTO currentChallengeData = currentChallenge.getData();
                     String path = "challenge/" + "Challenge#" + currentChallengeData.getId() + ".png";
-                    System.out.println(path);
                     File file = new File(path);
                     Image img;
                     if (!file.isFile()) {
-                        img = new Image(currentChallengeData.getFullpicture());
+                        img = new Image(currentChallengeData.getFullPicture());
                         ImageTools.saveImg(img, path);
                     } else {
                         img = new Image(file.toURI().toString());
@@ -128,7 +127,6 @@ public class ProjectsController {
 
         });
         task.setOnFailed(event -> {
-            System.out.println("FAIL");
         });
 
 
@@ -137,15 +135,15 @@ public class ProjectsController {
     }
 
     private void loadProjets() {
-//        try {
-//            ProjetDAO projets = new ProjetDAO(DatabaseManager.getConnection());
-//            List<Projet> data = projets.readAllProjects();
-//            Projets = FXCollections.observableArrayList(data);
-//            listProjects.setItems(Projets);
-//
-//        } catch (SQLException e) {
-//
-//        }
+        try {
+            ProjetDAO recupProjets = new ProjetDAO(DatabaseManager.getConnection());
+            ArrayList<Projet> data = recupProjets.readAllProjects();
+            projets = FXCollections.observableArrayList(data);
+            this.listProjects.setItems(projets);
+
+        } catch (SQLException e) {
+
+        }
     }
 
 }

@@ -7,7 +7,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="fr.framelab.Controller.ProjectsController"
-            minHeight="1920.0" minWidth="1080.0"
+            minHeight="600.0" minWidth="1300.0"
             stylesheets="@challenge.css"
             styleClass="root">
 
@@ -30,34 +30,33 @@
 
     <center>
         <VBox>
-            <VBox styleClass="boxImgChallenge">
-                <ImageView fx:id="challengeImage"/>
+            <VBox>
+                <VBox styleClass="boxImgChallenge">
+                    <ImageView fx:id="challengeImage"/>
+                </VBox>
+
+                <Label styleClass="titleHistory">Mes Projets</Label>
+                <TableView fx:id="listProjects">
+                    <columns>
+                        <TableColumn text="Nom" fx:id="NameProjets"/>
+                        <TableColumn text="Date de dernière modification" fx:id="LastEditProjets"/>
+                        <TableColumn text = "Accès" fx:id="btnAccès"/>
+                    </columns>
+                </TableView>
             </VBox>
 
-            <TableView>
-                <Label styleClass="titleHistory">Mes Projets</Label>
-
-                <TableView fx:id="listProjects"/>
-                <columns>
-                    <TableColumn text="Nom" fx:id="NameProjets"/>
-                    <TableColumn text="Date de dernière modification" fx:id="LastEditProjets"/>
-                    <!--                        <TableColumn text = "Accès" fx:id="btnAccès"/>-->
-                </columns>
-            </TableView>
+            <VBox styleClass="descChallenge">
+                <Label>Title :</Label>
+                <Label fx:id="titleChallenge"/>
+                <Label>Description :</Label>
+                <Label fx:id="descriptionChallenge"/>
+                <Label>Date start :</Label>
+                <Label fx:id="dateStartChallenge"/>
+                <Label>Date End :</Label>
+                <Label fx:id="dateEndChallenge"/>
+                <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
+            </VBox>
         </VBox>
-
-        <VBox styleClass="descChallenge">
-            <Label>Title :</Label>
-            <Label fx:id="titleChallenge"/>
-            <Label>Description :</Label>
-            <Label fx:id="descriptionChallenge"/>
-            <Label>Date start :</Label>
-            <Label fx:id="dateStartChallenge"/>
-            <Label>Date End :</Label>
-            <Label fx:id="dateEndChallenge"/>
-            <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
-        </VBox>
-
     </center>
 
 </BorderPane>
