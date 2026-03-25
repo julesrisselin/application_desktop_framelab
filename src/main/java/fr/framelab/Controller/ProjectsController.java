@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProjectsController {
+    @FXML
+    private Button loadProject;
     @FXML
     private Button NewProjetButton;
     @FXML
@@ -144,6 +147,13 @@ public class ProjectsController {
         } catch (SQLException e) {
 
         }
+    }
+
+    @FXML
+    private void openProject() throws Exception {
+        Projet selected = listProjects.getSelectionModel().getSelectedItem();
+        EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
+        controller.setupChallenge(selected.getId_challenge());
     }
 
 }

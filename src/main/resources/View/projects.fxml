@@ -40,9 +40,9 @@
                     <columns>
                         <TableColumn text="Nom" fx:id="NameProjets"/>
                         <TableColumn text="Date de dernière modification" fx:id="LastEditProjets"/>
-                        <TableColumn text = "Accès" fx:id="btnAccès"/>
                     </columns>
                 </TableView>
+                <Button fx:id="loadProject" onAction="#openProject"> Ouvrir </Button>
             </VBox>
 
             <VBox styleClass="descChallenge">
