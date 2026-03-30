@@ -7,6 +7,7 @@ public class Projet {
     protected String date_start;
     protected String date_last_edit;
     protected int id_challenge;
+    protected int rotate;
 
     public Projet(int id, String name, String picture, String date_start, String date_last_edit, int id_challenge) {
         this.id = id;
@@ -15,10 +16,19 @@ public class Projet {
         this.date_start = date_start;
         this.date_last_edit = date_last_edit;
         this.id_challenge = id_challenge;
+        this.rotate = 0;
     }
 
     public Projet(String name, String picture, String date_start, String date_last_edit, int id_challenge){
         this(-1,name,picture,date_start,date_last_edit,id_challenge);
+    }
+
+    public int getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(int rotate) {
+        this.rotate = rotate;
     }
 
     public int getId() {

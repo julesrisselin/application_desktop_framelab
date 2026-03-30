@@ -53,6 +53,7 @@ public class EditorController {
             this.newProject = newProject;
             this.currentProjet = currentProjet;
             this.id_challenge = currentProjet.getId_challenge();
+            this.rotation = currentProjet.getRotate();
             String path;
             if(newProject == true) {
                 path = "challenge/Challenge#" + this.id_challenge + ".png";
@@ -72,6 +73,9 @@ public class EditorController {
         this.canvas = new Canvas(900, 900);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         challengeContainer.getChildren().add(canvas);
+
+
+
         String path;
         if (newProject == true){
             path = "challenge/Challenge#" + this.id_challenge + ".png";

@@ -40,7 +40,7 @@ public class ProjetDAO {
     }
 
     public void updateProjet(Projet projet) {
-        String sql = "UPDATE projets SET name = ?,picture = ?, date_start = ?, date_last_edit = ?, id_challenge = ? WHERE id = ?";
+        String sql = "UPDATE projets SET name = ?,picture = ?, date_start = ?, date_last_edit = ?, id_challenge = ?, rotate = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
 
@@ -49,7 +49,8 @@ public class ProjetDAO {
             pstmt.setString(3, projet.getDate_start());
             pstmt.setString(4, projet.getDate_last_edit());
             pstmt.setInt(5, projet.getId_challenge());
-            pstmt.setInt(6, projet.getId());
+            pstmt.setInt(6, projet.getRotate());
+            pstmt.setInt(7, projet.getId());
             pstmt.executeUpdate();
 
             int rows = pstmt.executeUpdate();
@@ -62,7 +63,7 @@ public class ProjetDAO {
     }
 
     public Optional<Projet> readProjet(int projetId) {
-        String sql = "SELECT id, name, picture, date_start, date_last_edit, id_challenge FROM Projets WHERE id = ?";
+        String sql = "SELECT id, name, picture, date_start, date_last_edit, id_challenge, rotate FROM Projets WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, projetId);

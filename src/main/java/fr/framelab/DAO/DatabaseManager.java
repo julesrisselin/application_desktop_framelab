@@ -34,7 +34,8 @@ public class DatabaseManager {
                             picture TEXT NOT NULL,
                             date_start TEXT NOT NULL,
                             date_last_edit TEXT NOT NULL,
-                            id_challenge INTEGER
+                            id_challenge INTEGER,
+                            rotate INTEGER
                         );
                 """;
 
