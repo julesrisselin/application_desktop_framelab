@@ -40,7 +40,7 @@ public class ProjetDAO {
     }
 
     public void updateProjet(Projet projet) {
-        String sql = "UPDATE projets SET name = ?,picture = ?, date_start = ?, date_last_edit = ?, id_challenge = ?";
+        String sql = "UPDATE projets SET name = ?,picture = ?, date_start = ?, date_last_edit = ?, id_challenge = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
 
@@ -49,6 +49,7 @@ public class ProjetDAO {
             pstmt.setString(3, projet.getDate_start());
             pstmt.setString(4, projet.getDate_last_edit());
             pstmt.setInt(5, projet.getId_challenge());
+            pstmt.setInt(6, projet.getId());
             pstmt.executeUpdate();
 
             int rows = pstmt.executeUpdate();
@@ -56,7 +57,7 @@ public class ProjetDAO {
                 throw new IllegalArgumentException("Projet not found");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to save slide: " + e.getMessage(), e);
+            throw new RuntimeException("Failed to save projet: " + e.getMessage(), e);
         }
     }
 

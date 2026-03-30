@@ -107,14 +107,11 @@ public class ProjectsController {
                             if (result.isPresent()) {
                                 this.nameProject = result.get();
                             }
-
                             Projet newProjet = new Projet(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), currentChallengeData.getId());
                             ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
                             firstSave.createProjet(newProjet);
                             EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
-                            controller.setupChallenge(currentChallengeData.getId());
-
-
+                            controller.setupProjet(newProjet, true);
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
@@ -151,7 +148,7 @@ public class ProjectsController {
     private void openProject() throws Exception {
         Projet selected = listProjects.getSelectionModel().getSelectedItem();
         EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
-        controller.setupChallenge(selected.getId_challenge());
+        controller.setupProjet(selected, false);
     }
 
     @FXML

@@ -1,7 +1,10 @@
 package fr.framelab.Controller;
 
+import fr.framelab.DAO.DatabaseManager;
+import fr.framelab.DAO.ProjetDAO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
+import fr.framelab.Model.Projet;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class EditorController {
     @FXML
@@ -18,8 +23,11 @@ public class EditorController {
     private ImageView challengeImage;
     private Image image;
     private int rotation;
-    private int challengeId;
+    private int id_challenge;
+    private Projet currentProjet;
     private Canvas canvas;
+    private WritableImage layerImage;
+    private Boolean newProject;
 
     @FXML
     public void initialize() {
@@ -40,10 +48,17 @@ public class EditorController {
         }
     }
 
-    public void setupChallenge(int challengeId) throws Exception {
+    public void setupProjet(Projet currentProjet, Boolean newProject){
         try {
-            this.challengeId = challengeId;
-            String path = "challenge/Challenge#" + this.challengeId + ".png";
+            this.newProject = newProject;
+            this.currentProjet = currentProjet;
+            this.id_challenge = currentProjet.getId_challenge();
+            String path;
+            if(newProject == true) {
+                path = "challenge/Challenge#" + this.id_challenge + ".png";
+            } else {
+                path = "projets/Projet#" + this.currentProjet.getId() + ".png";
+            }
             File file = new File(path);
             this.image = new Image(file.toURI().toString());
             createCanvas();
@@ -57,12 +72,17 @@ public class EditorController {
         this.canvas = new Canvas(900, 900);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         challengeContainer.getChildren().add(canvas);
-
-        String path = "challenge/Challenge#" + this.challengeId + ".png";
+        String path;
+        if (newProject == true){
+            path = "challenge/Challenge#" + this.id_challenge + ".png";
+        } else {
+            path = "projets/Projet#" + currentProjet.getId() + ".png";
+        }
         File file = new File(path);
         Image img = new Image(file.toURI().toString());
-        WritableImage wImg = ImageTools.convertImage(img);
-        gc.drawImage(wImg, 0, 0);
+        this.layerImage = ImageTools.convertImage(img);
+        gc.drawImage(this.layerImage, 0, 0);
+
     }
 
     public void BandWFilter() {
@@ -83,6 +103,7 @@ public class EditorController {
             }
         }
         this.drawCanvasImage(dest);
+        this.layerImage = dest;
     }
 
     public void NegativeFilter() {
@@ -105,16 +126,17 @@ public class EditorController {
             }
         }
         this.drawCanvasImage(dest);
+        this.layerImage = dest;
     }
 
-    public void rotateImage(){
-        this.rotation = (this.rotation + 90)%360;
+    public void rotateImage() {
+        this.rotation = (this.rotation + 90) % 360;
         WritableImage source = ImageTools.copyImg(this.image);
         int h = (int) canvas.getHeight();
         int w = (int) canvas.getWidth();
 
-        int centreX = w/2;
-        int centreY = h/2;
+        int centreX = w / 2;
+        int centreY = h / 2;
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, w, h);
@@ -124,8 +146,8 @@ public class EditorController {
         gc.translate(-centreX, -centreY);
         this.drawCanvasImage(source);
         gc.restore();
+        this.layerImage = source;
     }
-
 
 
     public void drawCanvasImage(Image img) {
@@ -133,8 +155,12 @@ public class EditorController {
         gc.drawImage(img, 0, 0);
     }
 
-    public void saveProject(){
-
+    public void saveProject() throws SQLException, IOException {
+        String path = "projets/" + "Projet#" + currentProjet.getId() + ".png";
+        File file = new File(path);
+        ImageTools.saveImg(this.layerImage, path);
+        ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
+        saveProject.updateProjet(currentProjet);
     }
 
 

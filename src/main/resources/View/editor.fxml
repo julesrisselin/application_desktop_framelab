@@ -55,7 +55,7 @@
 
     <right>
         <VBox styleClass="buttonSaveAndSend">
-            <Button styleClass="saveButton">Enregistrer</Button>
+            <Button onAction="#saveProject" styleClass="saveButton">Enregistrer</Button>
             <Button styleClass="sendButton">Envoyer</Button>
         </VBox>
     </right>
