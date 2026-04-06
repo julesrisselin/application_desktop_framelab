@@ -32,6 +32,15 @@ public class ConnexionController {
         });
     }
 
+    @FXML
+    private void modeDemo() {
+        try {
+            Main.navigateTo(Screen.PROJECTS);
+        } catch (Exception e){
+
+        }
+    }
+
     @FXML private void connexion() throws Exception {
         String email = emailField.getText();
         String password = passwordField.getText();
