@@ -21,7 +21,7 @@
             </VBox>
             <Region minHeight="20"/>
             <Text> Rentrez les informations ci dessous</Text>
-            <TextField fx:id="nameProjectField" promptText="(Entrez le nom de votre projet)"/>
+            <TextField fx:id="nameProjectField" promptText="(Entrez le nom de votre project)"/>
         </VBox>
     </top>
 

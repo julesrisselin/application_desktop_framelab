@@ -4,7 +4,7 @@ import fr.framelab.DAO.DatabaseManager;
 import fr.framelab.DAO.ProjetDAO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
-import fr.framelab.Model.Projet;
+import fr.framelab.Model.Project;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,7 +24,7 @@ public class EditorController {
     private Image image;
     private int rotation;
     private int id_challenge;
-    private Projet currentProjet;
+    private Project currentProject;
     private Canvas canvas;
     private WritableImage layerImage;
     private Boolean newProject;
@@ -48,17 +48,17 @@ public class EditorController {
         }
     }
 
-    public void setupProjet(Projet currentProjet, Boolean newProject){
+    public void setupProjet(Project currentProject, Boolean newProject){
         try {
             this.newProject = newProject;
-            this.currentProjet = currentProjet;
-            this.id_challenge = currentProjet.getId_challenge();
-            this.rotation = currentProjet.getRotate();
+            this.currentProject = currentProject;
+            this.id_challenge = currentProject.getId_challenge();
+            this.rotation = currentProject.getRotate();
             String path;
             if(newProject == true) {
                 path = "challenge/Challenge#" + this.id_challenge + ".png";
             } else {
-                path = "projets/Projet#" + this.currentProjet.getId() + ".png";
+                path = "projets/Projet#" + this.currentProject.getId() + ".png";
             }
             File file = new File(path);
             this.image = new Image(file.toURI().toString());
@@ -80,7 +80,7 @@ public class EditorController {
         if (newProject == true){
             path = "challenge/Challenge#" + this.id_challenge + ".png";
         } else {
-            path = "projets/Projet#" + currentProjet.getId() + ".png";
+            path = "projets/Projet#" + currentProject.getId() + ".png";
         }
         File file = new File(path);
         Image img = new Image(file.toURI().toString());
@@ -160,11 +160,11 @@ public class EditorController {
     }
 
     public void saveProject() throws SQLException, IOException {
-        String path = "projets/" + "Projet#" + currentProjet.getId() + ".png";
+        String path = "projets/" + "Projet#" + currentProject.getId() + ".png";
         File file = new File(path);
         ImageTools.saveImg(this.layerImage, path);
         ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
-        saveProject.updateProjet(currentProjet);
+        saveProject.updateProjet(currentProject);
     }
 
 

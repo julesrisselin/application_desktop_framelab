@@ -6,7 +6,7 @@ import fr.framelab.DTO.ChallengeDTO;
 import fr.framelab.DTO.ChallengeDataDTO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
-import fr.framelab.Model.Projet;
+import fr.framelab.Model.Project;
 import fr.framelab.Service.CurrentChallenge;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +22,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.logging.ErrorManager;
 
 public class ProjectsController {
     @FXML
@@ -38,12 +37,12 @@ public class ProjectsController {
     @FXML
     private Label dateEndChallenge;
     @FXML
-    private TableView<Projet> listProjects;
+    private TableView<Project> listProjects;
     @FXML
-    private TableColumn<Projet, String> NameProjets;
+    private TableColumn<Project, String> NameProjets;
     @FXML
-    private TableColumn<Projet, String> LastEditProjets;
-    private ObservableList<Projet> projets;
+    private TableColumn<Project, String> LastEditProjets;
+    private ObservableList<Project> projects;
 
 
     public String nameProject;
@@ -104,11 +103,11 @@ public class ProjectsController {
                             if (result.isPresent()) {
                                 this.nameProject = result.get();
                             }
-                            Projet newProjet = new Projet(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), 1);
+                            Project newProject = new Project(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), 1);
                             ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
-                            firstSave.createProjet(newProjet);
+                            firstSave.createProjet(newProject);
                             EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
-                            controller.setupProjet(newProjet, true);
+                            controller.setupProjet(newProject, true);
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
@@ -149,11 +148,11 @@ public class ProjectsController {
                             if (result.isPresent()) {
                                 this.nameProject = result.get();
                             }
-                            Projet newProjet = new Projet(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), currentChallengeData.getId());
+                            Project newProject = new Project(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), currentChallengeData.getId());
                             ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
-                            firstSave.createProjet(newProjet);
+                            firstSave.createProjet(newProject);
                             EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
-                            controller.setupProjet(newProjet, true);
+                            controller.setupProjet(newProject, true);
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
@@ -174,10 +173,10 @@ public class ProjectsController {
 
     private void loadProjects() {
         try {
-            ProjetDAO recupProjets = new ProjetDAO(DatabaseManager.getConnection());
-            ArrayList<Projet> data = recupProjets.readAllProjects();
-            projets = FXCollections.observableArrayList(data);
-            this.listProjects.setItems(projets);
+            ProjetDAO recupProjects = new ProjetDAO(DatabaseManager.getConnection());
+            ArrayList<Project> data = recupProjects.readAllProjects();
+            projects = FXCollections.observableArrayList(data);
+            this.listProjects.setItems(projects);
 
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -188,17 +187,17 @@ public class ProjectsController {
 
     @FXML
     private void openProject() throws Exception {
-        Projet selected = listProjects.getSelectionModel().getSelectedItem();
+        Project selected = listProjects.getSelectionModel().getSelectedItem();
         EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
         controller.setupProjet(selected, false);
     }
 
     @FXML
     private void suppProject() throws Exception {
-        Projet selected = listProjects.getSelectionModel().getSelectedItem();
+        Project selected = listProjects.getSelectionModel().getSelectedItem();
         ProjetDAO suppProject = new ProjetDAO(DatabaseManager.getConnection());
         suppProject.deleteProjet(selected.getId());
-        projets.remove(selected);
+        projects.remove(selected);
     }
 
 }

@@ -1,7 +1,7 @@
 package fr.framelab.DAO;
 
 import fr.framelab.DTO.ChallengeDataDTO;
-import fr.framelab.Model.Projet;
+import fr.framelab.Model.Project;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,22 +16,22 @@ public class ProjetDAO {
     }
 
 
-    public void createProjet(Projet projet) {
+    public void createProjet(Project project) {
         String sql = "INSERT INTO projets (name, picture, date_start, date_last_edit, id_challenge) VALUES (?,?,?,?,?)";
 
         ChallengeDataDTO currentChallenge = new ChallengeDataDTO();
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, projet.getName());
+            pstmt.setString(1, project.getName());
             pstmt.setString(2, currentChallenge.getFullPicture());
-            pstmt.setString(3, projet.getDate_start());
-            pstmt.setString(4, projet.getDate_last_edit());
-            pstmt.setInt(5, projet.getId_challenge());
+            pstmt.setString(3, project.getDate_start());
+            pstmt.setString(4, project.getDate_last_edit());
+            pstmt.setInt(5, project.getId_challenge());
             pstmt.executeUpdate();
 
             try (ResultSet keys = pstmt.getGeneratedKeys()) {
                 if (keys.next()) {
-                    projet.setId(keys.getInt(1));
+                    project.setId(keys.getInt(1));
                 }
             }
         } catch (SQLException e) {
@@ -39,18 +39,18 @@ public class ProjetDAO {
         }
     }
 
-    public void updateProjet(Projet projet) {
+    public void updateProjet(Project project) {
         String sql = "UPDATE projets SET name = ?,picture = ?, date_start = ?, date_last_edit = ?, id_challenge = ?, rotate = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
 
-            pstmt.setString(1, projet.getName());
-            pstmt.setString(2, projet.getPicture());
-            pstmt.setString(3, projet.getDate_start());
-            pstmt.setString(4, projet.getDate_last_edit());
-            pstmt.setInt(5, projet.getId_challenge());
-            pstmt.setInt(6, projet.getRotate());
-            pstmt.setInt(7, projet.getId());
+            pstmt.setString(1, project.getName());
+            pstmt.setString(2, project.getPicture());
+            pstmt.setString(3, project.getDate_start());
+            pstmt.setString(4, project.getDate_last_edit());
+            pstmt.setInt(5, project.getId_challenge());
+            pstmt.setInt(6, project.getRotate());
+            pstmt.setInt(7, project.getId());
             pstmt.executeUpdate();
 
             int rows = pstmt.executeUpdate();
@@ -62,7 +62,7 @@ public class ProjetDAO {
         }
     }
 
-    public Optional<Projet> readProjet(int projetId) {
+    public Optional<Project> readProjet(int projetId) {
         String sql = "SELECT id, name, picture, date_start, date_last_edit, id_challenge, rotate FROM Projets WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -70,7 +70,7 @@ public class ProjetDAO {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(new Projet(
+                return Optional.of(new Project(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("picture"),
@@ -86,16 +86,16 @@ public class ProjetDAO {
     }
 
 
-    public ArrayList<Projet> readAllProjects() {
+    public ArrayList<Project> readAllProjects() {
         String sql = "SELECT * FROM Projets";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
 
-            ArrayList<Projet> Allprojects = new ArrayList<Projet>();
+            ArrayList<Project> Allprojects = new ArrayList<Project>();
 
             while (rs.next()) {
-                Allprojects.add(new Projet(
+                Allprojects.add(new Project(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("picture"),

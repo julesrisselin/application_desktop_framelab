@@ -1,6 +1,6 @@
 package fr.framelab.Model;
 
-public class Projet {
+public class Project {
     protected int id;
     protected String name;
     protected String picture;
@@ -9,7 +9,7 @@ public class Projet {
     protected int id_challenge;
     protected int rotate;
 
-    public Projet(int id, String name, String picture, String date_start, String date_last_edit, int id_challenge) {
+    public Project(int id, String name, String picture, String date_start, String date_last_edit, int id_challenge) {
         this.id = id;
         this.name = name;
         this.picture = picture;
@@ -19,7 +19,7 @@ public class Projet {
         this.rotate = 0;
     }
 
-    public Projet(String name, String picture, String date_start, String date_last_edit, int id_challenge){
+    public Project(String name, String picture, String date_start, String date_last_edit, int id_challenge){
         this(-1,name,picture,date_start,date_last_edit,id_challenge);
     }
 
