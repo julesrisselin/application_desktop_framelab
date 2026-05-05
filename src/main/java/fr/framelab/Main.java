@@ -54,7 +54,6 @@ public class Main extends Application {
         primaryStage.setScene(scene1);
         primaryStage.setTitle(title);
         primaryStage.show();
-        primaryStage.setFullScreen(true);
 
     return projet.getController();
     }

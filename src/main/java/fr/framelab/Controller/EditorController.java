@@ -5,9 +5,13 @@ import fr.framelab.DAO.ProjetDAO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
 import fr.framelab.Model.Project;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -19,8 +23,6 @@ import java.sql.SQLException;
 public class EditorController {
     @FXML
     private VBox challengeContainer;
-    @FXML
-    private ImageView challengeImage;
     private Image image;
     private int rotation;
     private int id_challenge;
@@ -28,11 +30,18 @@ public class EditorController {
     private Canvas canvas;
     private WritableImage layerImage;
     private Boolean newProject;
+    @FXML
+    private Slider sliderBrightness;
+    @FXML
+    private Slider sliderSaturation;
 
     @FXML
     public void initialize() {
         try {
             this.rotation = 0;
+            brightness();
+            saturation();
+
 
         } catch (Exception e) {
 
@@ -48,14 +57,14 @@ public class EditorController {
         }
     }
 
-    public void setupProjet(Project currentProject, Boolean newProject){
+    public void setupProjet(Project currentProject, Boolean newProject) {
         try {
             this.newProject = newProject;
             this.currentProject = currentProject;
             this.id_challenge = currentProject.getId_challenge();
             this.rotation = currentProject.getRotate();
             String path;
-            if(newProject == true) {
+            if (newProject == true) {
                 path = "challenge/Challenge#" + this.id_challenge + ".png";
             } else {
                 path = "projets/Projet#" + this.currentProject.getId() + ".png";
@@ -75,9 +84,8 @@ public class EditorController {
         challengeContainer.getChildren().add(canvas);
 
 
-
         String path;
-        if (newProject == true){
+        if (newProject == true) {
             path = "challenge/Challenge#" + this.id_challenge + ".png";
         } else {
             path = "projets/Projet#" + currentProject.getId() + ".png";
@@ -90,12 +98,11 @@ public class EditorController {
     }
 
     public void BandWFilter() {
-        WritableImage source = this.canvas.snapshot(null, null);
-        int h = (int) source.getHeight();
-        int w = (int) source.getWidth();
+        int h = (int) this.layerImage.getHeight();
+        int w = (int) this.layerImage.getWidth();
         WritableImage dest = new WritableImage(w, h);
 
-        PixelReader reader = source.getPixelReader();
+        PixelReader reader = this.layerImage.getPixelReader();
         PixelWriter writer = dest.getPixelWriter();
         for (int y = 0; y < h; y++) { // Parcourir tous les pixels
             for (int x = 0; x < w; x++) {
@@ -111,14 +118,13 @@ public class EditorController {
     }
 
     public void NegativeFilter() {
-        WritableImage source = this.canvas.snapshot(null, null);
-        int h = (int) source.getHeight();
-        int w = (int) source.getWidth();
+        int h = (int) this.layerImage.getHeight();
+        int w = (int) this.layerImage.getWidth();
         WritableImage dest = new WritableImage(w, h);
 
-        PixelReader reader = source.getPixelReader();
+        PixelReader reader = this.layerImage.getPixelReader();
         PixelWriter writer = dest.getPixelWriter();
-        for (int y = 0; y < h; y++) { // Parcourir tous les pixels
+        for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 Color sourceColor = reader.getColor(x, y);
                 double red = 1 - sourceColor.getRed();
@@ -135,22 +141,20 @@ public class EditorController {
 
     public void rotateImage() {
         this.rotation = (this.rotation + 90) % 360;
-        WritableImage source = ImageTools.copyImg(this.image);
         int h = (int) canvas.getHeight();
         int w = (int) canvas.getWidth();
 
         int centreX = w / 2;
         int centreY = h / 2;
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.WHITE);
+        gc.setFill(Color.TRANSPARENT);
         gc.fillRect(0, 0, w, h);
         gc.save();
         gc.translate(centreX, centreY);
         gc.rotate(this.rotation);
         gc.translate(-centreX, -centreY);
-        this.drawCanvasImage(source);
+        this.drawCanvasImage(this.layerImage);
         gc.restore();
-        this.layerImage = source;
     }
 
 
@@ -167,5 +171,61 @@ public class EditorController {
         saveProject.updateProjet(currentProject);
     }
 
+    public void brightness() {
+        this.sliderBrightness.setMax(1);
+        this.sliderBrightness.setMin(-1);
+        this.sliderBrightness.setBlockIncrement(0.01);
+        this.sliderBrightness.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+
+            int h = (int) this.layerImage.getHeight();
+            int w = (int) this.layerImage.getWidth();
+            WritableImage dest = new WritableImage(w, h);
+            double brightness = ((double) num.getValue());
+
+            PixelReader reader = this.layerImage.getPixelReader();
+            PixelWriter writer = dest.getPixelWriter();
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    Color sourceColor = reader.getColor(x, y);
+                    double red   = Math.clamp(sourceColor.getRed()   + brightness, 0.0, 1.0);
+                    double green = Math.clamp(sourceColor.getGreen() + brightness, 0.0, 1.0);
+                    double blue  = Math.clamp(sourceColor.getBlue()  + brightness, 0.0, 1.0);
+                    Color color = Color.color(red, green, blue);
+                    writer.setColor(x, y, color);
+                }
+            }
+            this.drawCanvasImage(dest);
+            this.layerImage = dest;
+        });
+    }
+
+    public void saturation() {
+        this.sliderSaturation.setMax(2);
+        this.sliderSaturation.setMin(0);
+        this.sliderSaturation.setValue(1);
+        this.sliderSaturation.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+
+            int h = (int) this.layerImage.getHeight();
+            int w = (int) this.layerImage.getWidth();
+            WritableImage dest = new WritableImage(w, h);
+            double saturation = ((double) num.getValue());
+
+            PixelReader reader = this.layerImage.getPixelReader();
+            PixelWriter writer = dest.getPixelWriter();
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    Color sourceColor = reader.getColor(x, y);
+                    double grey = 0.299 * sourceColor.getRed() + 0.587 * sourceColor.getGreen() + 0.114 * sourceColor.getBlue();
+                    double red   = Math.clamp(saturation + grey *(sourceColor.getRed() - grey), 0 ,1);
+                    double green   = Math.clamp(saturation + grey *(sourceColor.getGreen() - grey), 0 ,1);
+                    double blue   = Math.clamp(saturation + grey *(sourceColor.getBlue() - grey), 0 ,1);
+                    Color color = Color.color(red, green, blue);
+                    writer.setColor(x, y, color);
+                }
+            }
+            this.drawCanvasImage(dest);
+            this.layerImage = dest;
+        });
+    }
 
 }

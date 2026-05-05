@@ -65,11 +65,11 @@
             <VBox>
                 <HBox styleClass="Luminosité">
                     <Label styleClass="TextFilter">Luminosité : 0</Label>
-                    <Slider/>
+                    <Slider fx:id="sliderBrightness"/>
                 </HBox>
                 <HBox styleClass="Saturation">
                     <Label styleClass="TextFilter">Saturation : 0</Label>
-                    <Slider/>
+                    <Slider fx:id="sliderSaturation"/>
                 </HBox>
                 <HBox styleClass="Filter">
                     <Button styleClass="buttonBandW" onAction="#BandWFilter">Noir et blanc</Button>

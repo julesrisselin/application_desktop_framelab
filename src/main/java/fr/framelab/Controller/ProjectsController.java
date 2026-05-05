@@ -8,6 +8,7 @@ import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
 import fr.framelab.Model.Project;
 import fr.framelab.Service.CurrentChallenge;
+import fr.framelab.Service.RecupUser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -18,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -198,6 +200,12 @@ public class ProjectsController {
         ProjetDAO suppProject = new ProjetDAO(DatabaseManager.getConnection());
         suppProject.deleteProjet(selected.getId());
         projects.remove(selected);
+    }
+
+    @FXML
+    private void logOut() throws IOException {
+        RecupUser newCookies = new RecupUser();
+        Main.navigateTo(Screen.LOGIN);
     }
 
 }

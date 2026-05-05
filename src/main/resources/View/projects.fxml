@@ -8,17 +8,14 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="fr.framelab.Controller.ProjectsController"
             minHeight="600.0" minWidth="1300.0"
-            stylesheets="@challenge.css"
+            stylesheets="@projects.css"
             styleClass="root">
 
     <top>
         <VBox>
             <HBox styleClass="navbar">
-                <VBox styleClass="boxHome">
-                    <Button styleClass="home">Accueil</Button>
-                </VBox>
                 <VBox styleClass="boxLogOut">
-                    <Button styleClass="logout">Déconnexion</Button>
+                    <Button styleClass="logout" onAction="#logOut">Déconnexion</Button>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
                 <VBox styleClass="boxLogo">
@@ -31,9 +28,22 @@
     <center>
         <VBox>
             <VBox>
-                <VBox styleClass="boxImgChallenge">
-                    <ImageView fx:id="challengeImage"/>
-                </VBox>
+                <HBox styleClass="boxImgChallenge">
+                    <VBox>
+                        <ImageView styleClass="ImgChallenge" fx:id="challengeImage"/>
+                    </VBox>
+                    <VBox styleClass="descChallenge">
+                        <Label>Title :</Label>
+                        <Label fx:id="titleChallenge"/>
+                        <Label>Description :</Label>
+                        <Label fx:id="descriptionChallenge"/>
+                        <Label>Date start :</Label>
+                        <Label fx:id="dateStartChallenge"/>
+                        <Label>Date End :</Label>
+                        <Label fx:id="dateEndChallenge"/>
+                        <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
+                    </VBox>
+                </HBox>
 
                 <Label styleClass="titleHistory">Mes Projets</Label>
                 <TableView fx:id="listProjects">
@@ -42,21 +52,10 @@
                         <TableColumn text="Date de dernière modification" fx:id="LastEditProjets"/>
                     </columns>
                 </TableView>
-                <Button onAction="#openProject"> Ouvrir </Button>
-                <Button onAction="#suppProject"> Supprimer </Button>
+                <Button onAction="#openProject">Ouvrir</Button>
+                <Button onAction="#suppProject">Supprimer</Button>
             </VBox>
 
-            <VBox styleClass="descChallenge">
-                <Label>Title :</Label>
-                <Label fx:id="titleChallenge"/>
-                <Label>Description :</Label>
-                <Label fx:id="descriptionChallenge"/>
-                <Label>Date start :</Label>
-                <Label fx:id="dateStartChallenge"/>
-                <Label>Date End :</Label>
-                <Label fx:id="dateEndChallenge"/>
-                <Button fx:id="NewProjetButton" styleClass="NewProjetButton">Nouveau Projet</Button>
-            </VBox>
         </VBox>
     </center>
 

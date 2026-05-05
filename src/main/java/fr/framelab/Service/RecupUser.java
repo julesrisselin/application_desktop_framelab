@@ -18,14 +18,9 @@ public class RecupUser {
 
     private final HttpClient client;
     private final ObjectMapper mapper;
-    private final CookieManager cookieManager;
 
     public RecupUser() {
-        this.cookieManager = new CookieManager();
-        this.cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        this.client = HttpClient.newBuilder()
-                .cookieHandler(cookieManager)
-                .build();
+        this.client = HttpClientManager.getClient();
         this.mapper = new ObjectMapper();
     }
 
