@@ -25,6 +25,8 @@ public class EditorController {
     private VBox challengeContainer;
     private Image image;
     private int rotation;
+    private double lum;
+    private double sat;
     private int id_challenge;
     private Project currentProject;
     private Canvas canvas;
@@ -39,8 +41,25 @@ public class EditorController {
     public void initialize() {
         try {
             this.rotation = 0;
-            brightness();
-            saturation();
+            this.lum = 0.0;
+            this.sat = 0.0;
+
+            this.sliderBrightness.setMax(1);
+            this.sliderBrightness.setMin(-1);
+            this.sliderBrightness.setBlockIncrement(0.01);
+            sliderBrightness.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                this.lum = (double) newVal;
+                display();
+            });
+
+            this.sliderSaturation.setMin(0.0);
+            this.sliderSaturation.setMax(2.0);
+            this.sliderSaturation.setValue(1.0);
+            this.sliderSaturation.setBlockIncrement(0.01);
+            sliderSaturation.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+                this.sat = (double) newVal;
+                display();
+            });
 
 
         } catch (Exception e) {
@@ -82,7 +101,6 @@ public class EditorController {
         this.canvas = new Canvas(900, 900);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         challengeContainer.getChildren().add(canvas);
-
 
         String path;
         if (newProject == true) {
@@ -171,61 +189,64 @@ public class EditorController {
         saveProject.updateProjet(currentProject);
     }
 
-    public void brightness() {
-        this.sliderBrightness.setMax(1);
-        this.sliderBrightness.setMin(-1);
-        this.sliderBrightness.setBlockIncrement(0.01);
-        this.sliderBrightness.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+    public void brightnessFilter(WritableImage drawImage) {
+            int h = (int) drawImage.getHeight();
+            int w = (int) drawImage.getWidth();
 
-            int h = (int) this.layerImage.getHeight();
-            int w = (int) this.layerImage.getWidth();
-            WritableImage dest = new WritableImage(w, h);
-            double brightness = ((double) num.getValue());
-
-            PixelReader reader = this.layerImage.getPixelReader();
-            PixelWriter writer = dest.getPixelWriter();
+            PixelReader reader = drawImage.getPixelReader();
+            PixelWriter writer = drawImage.getPixelWriter();
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
                     Color sourceColor = reader.getColor(x, y);
-                    double red   = Math.clamp(sourceColor.getRed()   + brightness, 0.0, 1.0);
-                    double green = Math.clamp(sourceColor.getGreen() + brightness, 0.0, 1.0);
-                    double blue  = Math.clamp(sourceColor.getBlue()  + brightness, 0.0, 1.0);
+                    double red   = Math.clamp(sourceColor.getRed()   + this.lum, 0.0, 1.0);
+                    double green = Math.clamp(sourceColor.getGreen() + this.lum, 0.0, 1.0);
+                    double blue  = Math.clamp(sourceColor.getBlue()  + this.lum, 0.0, 1.0);
                     Color color = Color.color(red, green, blue);
                     writer.setColor(x, y, color);
                 }
             }
-            this.drawCanvasImage(dest);
-            this.layerImage = dest;
-        });
     }
 
-    public void saturation() {
-        this.sliderSaturation.setMax(2);
-        this.sliderSaturation.setMin(0);
-        this.sliderSaturation.setValue(1);
-        this.sliderSaturation.valueProperty().addListener((ObservableValue<? extends Number> num, Number oldVal, Number newVal) -> {
+    public void saturationFilter(WritableImage drawImage) {
+            int h = (int) drawImage.getHeight();
+            int w = (int) drawImage.getWidth();
 
-            int h = (int) this.layerImage.getHeight();
-            int w = (int) this.layerImage.getWidth();
-            WritableImage dest = new WritableImage(w, h);
-            double saturation = ((double) num.getValue());
-
-            PixelReader reader = this.layerImage.getPixelReader();
-            PixelWriter writer = dest.getPixelWriter();
+            PixelReader reader = drawImage.getPixelReader();
+            PixelWriter writer = drawImage.getPixelWriter();
             for (int y = 0; y < h; y++) {
                 for (int x = 0; x < w; x++) {
                     Color sourceColor = reader.getColor(x, y);
                     double grey = 0.299 * sourceColor.getRed() + 0.587 * sourceColor.getGreen() + 0.114 * sourceColor.getBlue();
-                    double red   = Math.clamp(saturation + grey *(sourceColor.getRed() - grey), 0 ,1);
-                    double green   = Math.clamp(saturation + grey *(sourceColor.getGreen() - grey), 0 ,1);
-                    double blue   = Math.clamp(saturation + grey *(sourceColor.getBlue() - grey), 0 ,1);
+                    double red   = Math.clamp(grey + this.sat *(sourceColor.getRed() - grey), 0 ,1);
+                    double green   = Math.clamp(grey + this.sat *(sourceColor.getGreen() - grey), 0 ,1);
+                    double blue   = Math.clamp(grey + this.sat *(sourceColor.getBlue() - grey), 0 ,1);
                     Color color = Color.color(red, green, blue);
                     writer.setColor(x, y, color);
                 }
             }
-            this.drawCanvasImage(dest);
-            this.layerImage = dest;
-        });
     }
+
+    public void display(){
+        WritableImage drawImage = ImageTools.copyImg(this.layerImage);
+        brightnessFilter(drawImage);
+        saturationFilter(drawImage);
+        this.drawCanvasImage(drawImage);
+    }
+
+    public void applyLum(){
+        brightnessFilter(this.layerImage);
+        this.sliderBrightness.setValue(0);
+        this.drawCanvasImage(layerImage);
+    }
+
+    public void applySat(){
+        saturationFilter(this.layerImage);
+        this.sliderSaturation.setValue(1);
+        this.drawCanvasImage(layerImage);
+    }
+
+
+
+
 
 }

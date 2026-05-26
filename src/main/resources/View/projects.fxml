@@ -30,7 +30,7 @@
             <VBox>
                 <HBox styleClass="boxImgChallenge">
                     <VBox>
-                        <ImageView styleClass="ImgChallenge" fx:id="challengeImage"/>
+                        <ImageView fx:id="challengeImage" styleClass="ImgChallenge" fitWidth="90" fitHeight="90" preserveRatio="true" />
                     </VBox>
                     <VBox styleClass="descChallenge">
                         <Label>Title :</Label>

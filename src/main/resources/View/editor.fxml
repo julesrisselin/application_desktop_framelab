@@ -46,10 +46,7 @@
     </left>
     <center>
         <VBox>
-            <VBox fx:id="challengeContainer" styleClass="Image">
-
-            </VBox>
-
+            <VBox fx:id="challengeContainer" styleClass="Image"/>
         </VBox>
     </center>
 
@@ -80,6 +77,8 @@
 
             <VBox>
                 <HBox>
+                    <Button fx:id="ApplySatButton" styleClass="NewProjetButton" onAction="#applyLum">Appliquer Luminosité</Button>
+                    <Button fx:id="ApplyLumButton" styleClass="NewProjetButton" onAction="#applySat">Appliquer Saturation</Button>
                     <Button styleClass="buttonEffacer">Effacer</Button>
                     <Button styleClass="buttonTracer">Tracer</Button>
                 </HBox>
