@@ -245,16 +245,20 @@ public class EditorController {
         this.drawCanvasImage(layerImage);
     }
 
-    public void sendPart() throws IOException, SQLException {
-        String path = "projets/" + "Projet#" + currentProject.getId() + ".png";
-        File file = new File(path);
-        ImageTools.saveImg(this.layerImage, path);
-        ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
-        saveProject.updateProjet(currentProject);
-        sendController controller = (sendController) Main.navigateTo(Screen.SEND);
-        controller.setupPart(currentProject);
+    public void sendPart() throws Exception {
+        try {
+            String path = "projets/" + "Projet#" + currentProject.getId() + ".png";
+            File file = new File(path);
+            ImageTools.saveImg(this.layerImage, path);
+            ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
+            saveProject.updateProjet(currentProject);
+            sendController controller = (sendController) Main.navigateTo(Screen.SEND);
+            controller.sendPart(currentProject);
+        } catch (Exception e) {
+            System.out.println("ERREUR EditorController.sendPart : " + e.getMessage());
+            e.printStackTrace();
+        }
+
     }
-
-
 
 }

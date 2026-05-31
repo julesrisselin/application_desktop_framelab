@@ -1,14 +1,25 @@
 package fr.framelab.Controller;
 
+import fr.framelab.DTO.PartDTO;
+import fr.framelab.DTO.TokenDTO;
+import fr.framelab.Enum.Screen;
+import fr.framelab.Main;
 import fr.framelab.Model.Project;
+import fr.framelab.Service.sendPart;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 
 import java.io.File;
+import java.io.IOException;
 
 public class sendController {
-    int id_challenge;
-    String pathImg;
+    private final sendPart sendPart = new sendPart();
+    @FXML
+    private Label feedbackPart;
+    private int id_challenge;
+    private String pathImg;
 
 
     @FXML
@@ -17,15 +28,36 @@ public class sendController {
     }
 
 
-    public void setupPart(Project currentProject) {
-        try {
-            this.id_challenge = currentProject.getId_challenge();
-            this.pathImg = currentProject.getPicture();
+    public void sendPart(Project currentProject) throws Exception {
+
+        this.id_challenge = currentProject.getId_challenge();
+        this.pathImg = currentProject.getPicture();
 
 
-        } catch (Exception e) {
+        Task<PartDTO> task = new Task<>() {
+            @Override
+            protected PartDTO call() throws Exception {
+                return sendPart.subPart(id_challenge, pathImg);
+            }
+        };
 
-        }
+        task.setOnSucceeded(event -> {
+            try {
+                Main.navigateTo(Screen.PROJECTS);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
+        task.setOnFailed(event -> {
+            feedbackPart.setText("Erreur : impossible de contacter le serveur");
+            Throwable ex = task.getException();
+            System.out.println("ERREUR sendPart task : " + ex.getMessage());
+            ex.printStackTrace();
+            feedbackPart.setText("Erreur : " + ex.getMessage());
+        });
+
+        new Thread(task).start();
     }
 }
+

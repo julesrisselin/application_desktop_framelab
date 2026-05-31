@@ -1,10 +1,13 @@
 package fr.framelab.Controller;
 
 import fr.framelab.DTO.TokenDTO;
+import fr.framelab.DTO.UserDTO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
 import fr.framelab.Model.User;
 import fr.framelab.Service.RecupUser;
+import fr.framelab.Service.SaveUser;
+import fr.framelab.Service.SessionManager;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,9 +61,33 @@ public class ConnexionController {
             TokenDTO token = task.getValue();
             if(token != null){
                 try {
-                    Main.navigateTo(Screen.PROJECTS);
-                } catch (Exception e){
+                    SessionManager.setToken(token.getToken());
 
+                    Task<Void> Task = new Task<>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            UserDTO user = new SaveUser().getUser();
+                            SessionManager.SetCurrentUser(user);
+
+                            return null;
+                        }
+                    };
+                    Task.setOnSucceeded(e -> {
+                        try {
+
+                            Main.navigateTo(Screen.PROJECTS);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+
+                        }
+                    });
+                    Task.setOnFailed(e -> {
+                        System.out.println("ERREUR meTask : " + Task.getException().getMessage());
+                        Task.getException().printStackTrace();
+                    });
+                    new Thread(Task).start();
+                } catch (Exception e){
+                    System.out.println("test 6");
                 }
             } else {
                 feedbackLogin.setText("Identifiants invalides");
