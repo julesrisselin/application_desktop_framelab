@@ -32,7 +32,7 @@ public class RecupUser {
 
             // Construction de la requête
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:3000/api/auth/login"))
+                    .uri(URI.create("http://framelab.jules-risselin.fr/api/auth/login"))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                     .build();

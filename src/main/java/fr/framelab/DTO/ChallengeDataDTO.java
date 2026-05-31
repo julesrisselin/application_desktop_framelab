@@ -7,7 +7,7 @@ public class ChallengeDataDTO {
     private String picture;
     private String date_start;
     private String date_end;
-    private static String IMG_URL = "http://localhost:3000";
+    private static String IMG_URL = "http://framelab.jules-risselin.fr";
 
     public ChallengeDataDTO() {
     }

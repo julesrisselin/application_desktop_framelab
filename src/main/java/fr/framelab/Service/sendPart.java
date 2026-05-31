@@ -24,7 +24,7 @@
 //            // Construction de la requête
 //            HttpRequest request = HttpRequest.newBuilder()
 //                    .uri(URI.create("http://localhost:3000/api/participations"))
-//                    .POST()
+//                    .POST(HttpRequest.BodyPublishers.ofFile())
 //                    .build();
 //            // Envoi et réception
 //            HttpResponse<String> response = client.send(request,

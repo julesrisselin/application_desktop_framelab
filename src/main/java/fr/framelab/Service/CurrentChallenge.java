@@ -23,7 +23,7 @@ public class CurrentChallenge {
         try {
             // Construction de la requête
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:3000/api/challenges/current"))
+                    .uri(URI.create("http://framelab.jules-risselin.fr/api/challenges/current"))
                     .GET()
                     .build();
             // Envoi et réception
