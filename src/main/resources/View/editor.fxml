@@ -46,7 +46,7 @@
     </left>
     <center>
         <VBox>
-            <VBox fx:id="challengeContainer" styleClass="Image"/>
+            <StackPane fx:id="challengeContainer" styleClass="Image" maxWidth="900" maxHeight="900"/>
         </VBox>
     </center>
 

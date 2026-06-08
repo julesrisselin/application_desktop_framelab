@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -22,7 +23,7 @@ import java.sql.SQLException;
 
 public class EditorController {
     @FXML
-    private VBox challengeContainer;
+    private StackPane challengeContainer;
     private Image image;
     private int rotation;
     private double lum;
@@ -98,10 +99,15 @@ public class EditorController {
     }
 
     public void createCanvas() {
-        this.canvas = new Canvas(900, 900);
+        this.canvas = new Canvas(this.image.getWidth(), this.image.getHeight());
+        double x = 900/this.image.getWidth();
+        double y = 900/this.image.getHeight();
+        double z = Math.min(x,y);
+        this.challengeContainer.setScaleX(z);
+        this.challengeContainer.setScaleY(z);
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
         challengeContainer.getChildren().add(canvas);
-
         String path;
         if (newProject == true) {
             path = "challenge/Challenge#" + this.id_challenge + ".png";
@@ -112,7 +118,6 @@ public class EditorController {
         Image img = new Image(file.toURI().toString());
         this.layerImage = ImageTools.convertImage(img);
         gc.drawImage(this.layerImage, 0, 0);
-
     }
 
     public void BandWFilter() {

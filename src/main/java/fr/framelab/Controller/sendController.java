@@ -31,8 +31,7 @@ public class sendController {
     public void sendPart(Project currentProject) throws Exception {
 
         this.id_challenge = currentProject.getId_challenge();
-        this.pathImg = currentProject.getPicture();
-
+        this.pathImg = "projets/" + "Projet#" + currentProject.getId() + ".png";
 
         Task<PartDTO> task = new Task<>() {
             @Override
@@ -42,11 +41,8 @@ public class sendController {
         };
 
         task.setOnSucceeded(event -> {
-            try {
-                Main.navigateTo(Screen.PROJECTS);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            feedbackPart.setText("Participation bien envoyé");
+
         });
 
         task.setOnFailed(event -> {
