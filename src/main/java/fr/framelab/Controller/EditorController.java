@@ -187,6 +187,7 @@ public class EditorController {
         ImageTools.saveImg(this.layerImage, path);
         ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
         saveProject.updateProjet(currentProject);
+        Main.navigateTo(Screen.PROJECTS);
     }
 
     public void brightnessFilter(WritableImage drawImage) {

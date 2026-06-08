@@ -43,7 +43,7 @@ public class Main extends Application {
                 title = "Édition";
                 break;
             case Screen.SEND:
-                path = "/View/send.fxml";
+                path = "/View/submission.fxml";
                 title = "Envoi";
                 break;
         }

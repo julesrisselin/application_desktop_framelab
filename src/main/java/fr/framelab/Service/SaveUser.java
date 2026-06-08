@@ -22,7 +22,7 @@ public class SaveUser {
     public UserDTO getUser() throws Exception {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://framelab.jules-risselin.fr/api/users/me"))
+                .uri(URI.create(UrlManager.getURL() + "api/users/me"))
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();

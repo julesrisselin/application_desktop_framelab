@@ -33,8 +33,8 @@
         <VBox alignment="CENTER" styleClass="first_scare">
             <Button styleClass="login" onAction="#modeDemo"> Mode Demo </Button>
             <VBox alignment="CENTER" styleClass="second_scare">
-                <TextField fx:id="emailField" promptText="(Entrez votre email)" styleClass="email">julesrisselin@gmail.com</TextField>
-                <PasswordField fx:id="passwordField" promptText="(Entrez votre mot de passe)" styleClass="password">jules</PasswordField>
+                <TextField fx:id="emailField" promptText="(Entrez votre email)" styleClass="email">test@test.com</TextField>
+                <PasswordField fx:id="passwordField" promptText="(Entrez votre mot de passe)" styleClass="password">test</PasswordField>
             </VBox>
             <Button fx:id="loginButton" styleClass="login" onAction="#connexion"> Se Connecter </Button>
             <Label fx:id="feedbackLogin"/>

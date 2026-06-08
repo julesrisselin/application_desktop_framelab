@@ -1,6 +1,7 @@
 package fr.framelab.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mizosoft.methanol.Methanol;
 import com.github.mizosoft.methanol.MultipartBodyPublisher;
 import fr.framelab.DTO.ChallengeDTO;
 import fr.framelab.DTO.PartDTO;
@@ -15,7 +16,7 @@ import java.nio.file.Path;
 
 public class sendPart {
 
-    private final HttpClient client;
+    private final Methanol client;
     private final ObjectMapper mapper;
 
     public sendPart () {
@@ -31,13 +32,12 @@ public class sendPart {
             MultipartBodyPublisher multipartBody = MultipartBodyPublisher.newBuilder()
                     .textPart("id_challenge", String.valueOf(id_challenge))
                     .textPart("user_id", String.valueOf(userId))
-                    .filePart("image", Path.of(pathImg)) // Methanol détecte le Content-Type auto
+                    .filePart("uploaded_file", Path.of(pathImg)) // Methanol détecte le Content-Type auto
                     .build();
 
             // Construction de la requête
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://framelab.jules-risselin.fr/api/participations"))
-                    .header("Content-Type", "application/json")
+                    .uri(URI.create(UrlManager.getURL() + "api/participations"))
                     .POST(multipartBody)
                     .build();
             // Envoi et réception

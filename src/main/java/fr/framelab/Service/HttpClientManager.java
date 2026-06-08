@@ -1,19 +1,20 @@
 package fr.framelab.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mizosoft.methanol.Methanol;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.http.HttpClient;
 
 public class HttpClientManager {
-    private static HttpClient client;
+    private static Methanol client;
 
-    public static HttpClient getClient() {
+    public static Methanol getClient() {
         if (client == null) {
             CookieManager cookieManager = new CookieManager();
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-            client = HttpClient.newBuilder()
+            client = Methanol.newBuilder()
                     .cookieHandler(cookieManager)
                     .build();
         }
