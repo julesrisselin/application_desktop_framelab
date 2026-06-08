@@ -1,5 +1,7 @@
 package fr.framelab.DTO;
 
+import fr.framelab.Service.UrlManager;
+
 public class ChallengeDataDTO {
     private int id;
     private String title_theme;
@@ -7,7 +9,7 @@ public class ChallengeDataDTO {
     private String picture;
     private String date_start;
     private String date_end;
-    private static String IMG_URL = "http://framelab.jules-risselin.fr";
+
 
     public ChallengeDataDTO() {
     }
@@ -42,7 +44,7 @@ public class ChallengeDataDTO {
     }
 
     public String getFullPicture(){
-        return IMG_URL + picture;
+        return UrlManager.getURL() + picture;
     }
 
     public void setPicture(String picture) {

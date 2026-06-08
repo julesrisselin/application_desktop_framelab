@@ -19,7 +19,7 @@ public class DatabaseManager {
 
     public static Connection getConnection(String name) throws SQLException {
         if (connection == null){
-            connection = DriverManager.getConnection("jdbc:sqlite::"+ name);
+            connection = DriverManager.getConnection("jdbc:sqlite:"+ name);
             connection.createStatement().execute("PRAGMA foreign_keys = ON");
             initializeTableProjets();
         }

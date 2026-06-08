@@ -7,6 +7,7 @@ import fr.framelab.DTO.ChallengeDataDTO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
 import fr.framelab.Model.Project;
+import fr.framelab.Service.ChallengeDemoManager;
 import fr.framelab.Service.CurrentChallenge;
 import fr.framelab.Service.RecupUser;
 import javafx.collections.FXCollections;
@@ -75,97 +76,108 @@ public class ProjectsController {
 
         task.setOnSucceeded(event -> {
             ChallengeDTO currentChallenge = task.getValue();
-            if (currentChallenge == null) {
-                try {
-                    String path = "challenge/pardefaut.png";
-                    File file = new File(path);
-                    Image img;
-                    if (!file.isFile()) {
-                        img = new Image("pardefaut.png");
-                        ImageTools.saveImg(img, path);
-                    } else {
-                        img = new Image(file.toURI().toString());
-                    }
-                    challengeImage.setImage(img);
-                    titleChallenge.setText("Test Démo");
-                    descriptionChallenge.setText("Ceci est un test pour la version démo");
-                    dateStartChallenge.setText("01/01/1900");
-                    dateEndChallenge.setText("01/01/2070");
+            try {
+                ChallengeDataDTO currentChallengeData = currentChallenge.getData();
 
-                    NewProjetButton.setOnAction(e -> {
-                        try {
-                            TextInputDialog dialog = new TextInputDialog("Valeur par défaut");
-                            dialog.setTitle("Rotation");
-                            dialog.setHeaderText("Entrer un nom de projet");
-                            dialog.setContentText("Nom :");
-
-                            Optional<String> result = dialog.showAndWait();
-
-
-                            if (result.isPresent()) {
-                                this.nameProject = result.get();
-                            }
-                            Project newProject = new Project(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), 1);
-                            ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
-                            firstSave.createProjet(newProject);
-                            EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
-                            controller.setupProjet(newProject, true);
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    });
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                if (currentChallengeData == null) {
+                    currentChallengeData = ChallengeDemoManager.getDemoChallenge().getData();
+                } else {
+                    currentChallengeData = currentChallenge.getData();
                 }
 
-            } else {
-                try {
-                    ChallengeDataDTO currentChallengeData = currentChallenge.getData();
-                    String path = "challenge/" + "Challenge#" + currentChallengeData.getId() + ".png";
-                    File file = new File(path);
-                    Image img;
-                    if (!file.isFile()) {
-                        img = new Image(currentChallengeData.getFullPicture());
-                        ImageTools.saveImg(img, path);
-                    } else {
-                        img = new Image(file.toURI().toString());
-                    }
-                    challengeImage.setImage(img);
-                    titleChallenge.setText(currentChallengeData.getTitle_theme());
-                    descriptionChallenge.setText(currentChallengeData.getDescription_theme());
-                    dateStartChallenge.setText(currentChallengeData.getDate_start());
-                    dateEndChallenge.setText(currentChallengeData.getDate_end());
+                ChallengeDataDTO finalChall = currentChallengeData;
 
-                    NewProjetButton.setOnAction(e -> {
-                        try {
-                            TextInputDialog dialog = new TextInputDialog("Valeur par défaut");
-                            dialog.setTitle("Rotation");
-                            dialog.setHeaderText("Entrer un nom de projet");
-                            dialog.setContentText("Nom :");
-
-                            Optional<String> result = dialog.showAndWait();
-
-
-                            if (result.isPresent()) {
-                                this.nameProject = result.get();
-                            }
-                            Project newProject = new Project(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), currentChallengeData.getId());
-                            ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
-                            firstSave.createProjet(newProject);
-                            EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
-                            controller.setupProjet(newProject, true);
-                        } catch (Exception ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    });
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                String path = "challenge/" + "Challenge#" + finalChall.getId() + ".png";
+                File file = new File(path);
+                Image img;
+                if (!file.isFile()) {
+                    img = new Image(finalChall.getFullPicture());
+                    ImageTools.saveImg(img, path);
+                } else {
+                    img = new Image(file.toURI().toString());
                 }
+                challengeImage.setImage(img);
+                titleChallenge.setText(finalChall.getTitle_theme());
+                descriptionChallenge.setText(finalChall.getDescription_theme());
+                dateStartChallenge.setText(finalChall.getDate_start());
+                dateEndChallenge.setText(finalChall.getDate_end());
+
+                NewProjetButton.setOnAction(e -> {
+                    try {
+                        TextInputDialog dialog = new TextInputDialog("Valeur par défaut");
+                        dialog.setTitle("Rotation");
+                        dialog.setHeaderText("Entrer un nom de projet");
+                        dialog.setContentText("Nom :");
+
+                        Optional<String> result = dialog.showAndWait();
+
+
+                        if (result.isPresent()) {
+                            this.nameProject = result.get();
+                        }
+                        Project newProject = new Project(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), finalChall.getId());
+                        ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
+                        firstSave.createProjet(newProject);
+                        EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
+                        controller.setupProjet(newProject, true);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         });
         task.setOnFailed(event -> {
+            ChallengeDataDTO finalChall = ChallengeDemoManager.getDemoChallenge().getData();
+
+            String path = "challenge/" + "Challenge#" + finalChall.getId() + ".png";
+            File file = new File(path);
+
+            File defaultFile = new File("challenge/pardefaut.png");
+
+            Image img;
+
+            if (!file.isFile()) {
+                img = new Image(defaultFile.toURI().toString());
+                try {
+                    ImageTools.saveImg(img, path);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                img = new Image(file.toURI().toString());
+            }
+            challengeImage.setImage(img);
+            challengeImage.setImage(img);
+            titleChallenge.setText(finalChall.getTitle_theme());
+            descriptionChallenge.setText(finalChall.getDescription_theme());
+            dateStartChallenge.setText(finalChall.getDate_start());
+            dateEndChallenge.setText(finalChall.getDate_end());
+
+            NewProjetButton.setOnAction(e -> {
+                try {
+                    TextInputDialog dialog = new TextInputDialog("Valeur par défaut");
+                    dialog.setTitle("Rotation");
+                    dialog.setHeaderText("Entrer un nom de projet");
+                    dialog.setContentText("Nom :");
+
+                    Optional<String> result = dialog.showAndWait();
+
+
+                    if (result.isPresent()) {
+                        this.nameProject = result.get();
+                    }
+                    Project newProject = new Project(this.nameProject, path, LocalDate.now().toString(), LocalDate.now().toString(), finalChall.getId());
+                    ProjetDAO firstSave = new ProjetDAO(DatabaseManager.getConnection());
+                    firstSave.createProjet(newProject);
+                    EditorController controller = (EditorController) Main.navigateTo(Screen.EDITOR);
+                    controller.setupProjet(newProject, true);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
         });
 
 

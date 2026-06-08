@@ -5,10 +5,12 @@ import fr.framelab.DAO.ProjetDAO;
 import fr.framelab.Enum.Screen;
 import fr.framelab.Main;
 import fr.framelab.Model.Project;
+import fr.framelab.Service.RecupUser;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
@@ -265,6 +267,12 @@ public class EditorController {
             e.printStackTrace();
         }
 
+    }
+
+    @FXML
+    private void logOut() throws IOException {
+        RecupUser newCookies = new RecupUser();
+        Main.navigateTo(Screen.LOGIN);
     }
 
 }

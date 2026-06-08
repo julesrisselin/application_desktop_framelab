@@ -19,10 +19,10 @@
         <VBox>
             <HBox styleClass="navbar">
                 <VBox styleClass="boxHome">
-                    <Button styleClass="home" onAction="#accueil">Accueil</Button>
+                    <Button onAction="#accueil">Accueil</Button>
                 </VBox>
                 <VBox styleClass="boxLogOut">
-                    <Button styleClass="logout">Déconnexion</Button>
+                    <Button onAction="#logOut"> Déconnexion</Button>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS"/>
                 <VBox styleClass="boxLogo">
@@ -32,18 +32,11 @@
         </VBox>
     </top>
 
-    <left>
-        <VBox styleClass="Calque">
+    <right>
+        <VBox>
 
-
-            <HBox>
-                <Button styleClass="buttonAddCalqueImage">+ Img</Button>
-                <Button styleClass="buttonMonter">^</Button>
-                <Button styleClass="buttonDescendre">v</Button>
-                <Button styleClass="buttonAddCalqueDessin">+ Dsin</Button>
-            </HBox>
         </VBox>
-    </left>
+    </right>
     <center>
         <VBox>
             <StackPane fx:id="challengeContainer" styleClass="Image" maxWidth="900" maxHeight="900"/>
@@ -61,11 +54,11 @@
         <HBox styleClass="Tools">
             <VBox>
                 <HBox styleClass="Luminosité">
-                    <Label styleClass="TextFilter">Luminosité : 0</Label>
+                    <Label styleClass="TextFilter">Luminosité :</Label>
                     <Slider fx:id="sliderBrightness"/>
                 </HBox>
                 <HBox styleClass="Saturation">
-                    <Label styleClass="TextFilter">Saturation : 0</Label>
+                    <Label styleClass="TextFilter">Saturation :</Label>
                     <Slider fx:id="sliderSaturation"/>
                 </HBox>
                 <HBox styleClass="Filter">
@@ -79,8 +72,6 @@
                 <HBox>
                     <Button fx:id="ApplySatButton" styleClass="NewProjetButton" onAction="#applyLum">Appliquer Luminosité</Button>
                     <Button fx:id="ApplyLumButton" styleClass="NewProjetButton" onAction="#applySat">Appliquer Saturation</Button>
-                    <Button styleClass="buttonEffacer">Effacer</Button>
-                    <Button styleClass="buttonTracer">Tracer</Button>
                 </HBox>
             </VBox>
         </HBox>
