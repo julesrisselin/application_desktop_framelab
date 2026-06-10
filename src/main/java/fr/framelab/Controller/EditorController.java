@@ -8,6 +8,7 @@ import fr.framelab.Model.Project;
 import fr.framelab.Service.RecupUser;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -15,10 +16,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -89,7 +93,7 @@ public class EditorController {
             if (newProject == true) {
                 path = "challenge/Challenge#" + this.id_challenge + ".png";
             } else {
-                path = "projets/Projet#" + this.currentProject.getId() + ".png";
+                path = "projets/Projet" + this.currentProject.getId() + ".png";
             }
             File file = new File(path);
             this.image = new Image(file.toURI().toString());
@@ -102,9 +106,9 @@ public class EditorController {
 
     public void createCanvas() {
         this.canvas = new Canvas(this.image.getWidth(), this.image.getHeight());
-        double x = 900/this.image.getWidth();
-        double y = 900/this.image.getHeight();
-        double z = Math.min(x,y);
+        double x = 900 / this.image.getWidth();
+        double y = 900 / this.image.getHeight();
+        double z = Math.min(x, y);
         this.challengeContainer.setScaleX(z);
         this.challengeContainer.setScaleY(z);
 
@@ -114,7 +118,7 @@ public class EditorController {
         if (newProject == true) {
             path = "challenge/Challenge#" + this.id_challenge + ".png";
         } else {
-            path = "projets/Projet#" + currentProject.getId() + ".png";
+            path = "projets/Projet" + currentProject.getId() + ".png";
         }
         File file = new File(path);
         Image img = new Image(file.toURI().toString());
@@ -172,7 +176,7 @@ public class EditorController {
         int centreX = w / 2;
         int centreY = h / 2;
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.TRANSPARENT);
+        gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, w, h);
         gc.save();
         gc.translate(centreX, centreY);
@@ -189,7 +193,7 @@ public class EditorController {
     }
 
     public void saveProject() throws SQLException, IOException {
-        String path = "projets/" + "Projet#" + currentProject.getId() + ".png";
+        String path = "projets/" + "Projet" + currentProject.getId() + ".png";
         File file = new File(path);
         ImageTools.saveImg(this.layerImage, path);
         ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
@@ -198,56 +202,56 @@ public class EditorController {
     }
 
     public void brightnessFilter(WritableImage drawImage) {
-            int h = (int) drawImage.getHeight();
-            int w = (int) drawImage.getWidth();
+        int h = (int) drawImage.getHeight();
+        int w = (int) drawImage.getWidth();
 
-            PixelReader reader = drawImage.getPixelReader();
-            PixelWriter writer = drawImage.getPixelWriter();
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    Color sourceColor = reader.getColor(x, y);
-                    double red   = Math.clamp(sourceColor.getRed()   + this.lum, 0.0, 1.0);
-                    double green = Math.clamp(sourceColor.getGreen() + this.lum, 0.0, 1.0);
-                    double blue  = Math.clamp(sourceColor.getBlue()  + this.lum, 0.0, 1.0);
-                    Color color = Color.color(red, green, blue);
-                    writer.setColor(x, y, color);
-                }
+        PixelReader reader = drawImage.getPixelReader();
+        PixelWriter writer = drawImage.getPixelWriter();
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                Color sourceColor = reader.getColor(x, y);
+                double red = Math.clamp(sourceColor.getRed() + this.lum, 0.0, 1.0);
+                double green = Math.clamp(sourceColor.getGreen() + this.lum, 0.0, 1.0);
+                double blue = Math.clamp(sourceColor.getBlue() + this.lum, 0.0, 1.0);
+                Color color = Color.color(red, green, blue);
+                writer.setColor(x, y, color);
             }
+        }
     }
 
     public void saturationFilter(WritableImage drawImage) {
-            int h = (int) drawImage.getHeight();
-            int w = (int) drawImage.getWidth();
+        int h = (int) drawImage.getHeight();
+        int w = (int) drawImage.getWidth();
 
-            PixelReader reader = drawImage.getPixelReader();
-            PixelWriter writer = drawImage.getPixelWriter();
-            for (int y = 0; y < h; y++) {
-                for (int x = 0; x < w; x++) {
-                    Color sourceColor = reader.getColor(x, y);
-                    double grey = 0.299 * sourceColor.getRed() + 0.587 * sourceColor.getGreen() + 0.114 * sourceColor.getBlue();
-                    double red   = Math.clamp(grey + this.sat *(sourceColor.getRed() - grey), 0 ,1);
-                    double green   = Math.clamp(grey + this.sat *(sourceColor.getGreen() - grey), 0 ,1);
-                    double blue   = Math.clamp(grey + this.sat *(sourceColor.getBlue() - grey), 0 ,1);
-                    Color color = Color.color(red, green, blue);
-                    writer.setColor(x, y, color);
-                }
+        PixelReader reader = drawImage.getPixelReader();
+        PixelWriter writer = drawImage.getPixelWriter();
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                Color sourceColor = reader.getColor(x, y);
+                double grey = 0.299 * sourceColor.getRed() + 0.587 * sourceColor.getGreen() + 0.114 * sourceColor.getBlue();
+                double red = Math.clamp(grey + this.sat * (sourceColor.getRed() - grey), 0, 1);
+                double green = Math.clamp(grey + this.sat * (sourceColor.getGreen() - grey), 0, 1);
+                double blue = Math.clamp(grey + this.sat * (sourceColor.getBlue() - grey), 0, 1);
+                Color color = Color.color(red, green, blue);
+                writer.setColor(x, y, color);
             }
+        }
     }
 
-    public void display(){
+    public void display() {
         WritableImage drawImage = ImageTools.copyImg(this.layerImage);
         brightnessFilter(drawImage);
         saturationFilter(drawImage);
         this.drawCanvasImage(drawImage);
     }
 
-    public void applyLum(){
+    public void applyLum() {
         brightnessFilter(this.layerImage);
         this.sliderBrightness.setValue(0);
         this.drawCanvasImage(layerImage);
     }
 
-    public void applySat(){
+    public void applySat() {
         saturationFilter(this.layerImage);
         this.sliderSaturation.setValue(1);
         this.drawCanvasImage(layerImage);
@@ -255,7 +259,7 @@ public class EditorController {
 
     public void sendPart() throws Exception {
         try {
-            String path = "projets/" + "Projet#" + currentProject.getId() + ".png";
+            String path = "projets/" + "Projet" + currentProject.getId() + ".png";
             File file = new File(path);
             ImageTools.saveImg(this.layerImage, path);
             ProjetDAO saveProject = new ProjetDAO(DatabaseManager.getConnection());
@@ -274,5 +278,4 @@ public class EditorController {
         RecupUser newCookies = new RecupUser();
         Main.navigateTo(Screen.LOGIN);
     }
-
 }

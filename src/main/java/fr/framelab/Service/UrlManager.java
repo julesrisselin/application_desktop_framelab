@@ -9,7 +9,7 @@ public class UrlManager {
     }
 
     public static String getURL(){
-        prod = false;
+        prod = true;
         if(prod){
             url = "http://framelab.jules-risselin.fr/";
         } else {

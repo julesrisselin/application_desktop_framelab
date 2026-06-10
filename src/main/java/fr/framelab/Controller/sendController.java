@@ -31,7 +31,7 @@ public class sendController {
     public void sendPart(Project currentProject) throws Exception {
 
         this.id_challenge = currentProject.getId_challenge();
-        this.pathImg = "projets/" + "Projet#" + currentProject.getId() + ".png";
+        this.pathImg = "projets/" + "Projet" + currentProject.getId() + ".png";
 
         Task<PartDTO> task = new Task<>() {
             @Override
